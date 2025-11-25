@@ -1,0 +1,2 @@
+class GrammarPointsController < ApplicationController
+end
