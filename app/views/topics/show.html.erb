@@ -16,4 +16,12 @@
   <h4>Examples:</h4>
   <p><%= grammar_point.examples %></p>
     <% end %>
+  <hr>
+  <h3>Written Challenge</h3>
+
+  <% if current_user.learning_language == "japanese" %>
+    <%= @challenge.content["en"] %>
+  <% elsif current_user.learning_language == "english" %>
+    <%= @challenge.content["jp"] %>
+  <% end %>
 </p>
