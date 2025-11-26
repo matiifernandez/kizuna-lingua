@@ -1,0 +1,29 @@
+<h1>Dashboard page</h1>
+<% if @most_recent_topic %>
+  <%= link_to @most_recent_topic.name, topic_path(@most_recent_topic), class: "btn btn-secondary"  %>
+  <h2>Current progress:</h2>
+  <% if @my_journal %>
+    <p>Your Journal: Complete</p>
+    <p>Your Conversation Challenge: <%= @most_recent_topic.challenges.first.journal.conversation_status %></p>
+    <% if @partner_journal && @partner_journal.feedback %>
+      <p>Leave feedback for your partner: Complete</p>
+    <% else %>
+      <p>Leave feedback for your partner: Incomplete</p>
+    <% end %>
+  <% else %>
+    <p>Your Journal: Not Complete</p>
+  <% end %>
+  <h2>Your partner's Status:</h2>
+  <% if @partner_journal %>
+    <p>Partner's Journal: Complete</p>
+    <p>Partner's Conversation challenge: <%= @partner_journal.conversation_status %></p>
+    <% if @my_journal && @my_journal.feedback %>
+      <p>Your partner has left you feedback, view it here: <%= link_to "Feedback", partnership_journal_route(@partnership, @most_recent_topic.challenges.first), class: "btn btn-secondary" %></p>
+    <% end %>
+  <% else %>
+    <p>Partner's Journal: Incomplete</p>
+  <% end %>
+  <%= link_to "Select a new topic to start", topics_path, class: "btn btn-secondary" %>
+<% else %>
+  <%= link_to "Select a new topic to start", topics_path, class: "btn btn-secondary" %>
+<% end %>
