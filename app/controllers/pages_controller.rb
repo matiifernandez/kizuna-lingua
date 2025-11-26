@@ -10,9 +10,12 @@ class PagesController < ApplicationController
     @current_user = current_user
     @partnership = current_user.partnership
     @partner = @partnership.partner_of(current_user)
-    @most_recent_topic = PartnershipTopic.where(status: "in progress").order(created_at: :desc).first.topic
-    @partner_journal = @most_recent_topic.challenges.first.partner_journal(current_user)
-    @my_journal = @most_recent_topic.challenges.first.journal
+    @most_recent = PartnershipTopic.where(status: "in progress").order(created_at: :desc)
+    if @most_recent.present?
+      @most_recent_topic = @most_recent.first.topic
+      @partner_journal = @most_recent_topic.challenges.first.partner_journal(current_user)
+      @my_journal = @most_recent_topic.challenges.first.journal
+    end
     # if @most_recent_topic
     #   @recent_topic = @most_recent_topic.topic
     # end
