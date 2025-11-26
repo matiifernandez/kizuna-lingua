@@ -22,4 +22,8 @@ class JournalPolicy < ApplicationPolicy
     # It was not created by themselves. (Can only give feedback to partner's journals)
     user.partnership && record.partnership == user.partnership && record.user != user
   end
+
+  def complete_conversation?
+    user.partnership && record.partnership == user.partnership
+  end
 end

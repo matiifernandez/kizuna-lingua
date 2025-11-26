@@ -42,9 +42,15 @@ class JournalsController < ApplicationController
     @journal = Journal.find(params[:id])
     authorize @journal
     if @journal.update(conversation_status: true)
-      redirect_to @journal.challenge, notice: "Conversation marked as complete."
+      partner_journal = @journal.challenge.partner_journal(current_user)
+      if partner_journal.present?
+        if partner_journal.id != @journal.id
+          partner_journal.update_column(:conversation_status, true)
+        end
+      end
+      redirect_to dashboard_path, notice: "Conversation marked as complete."
     else
-      redirect_to @journal.challenge, alert: "Failed to mark conversation as complete."
+      redirect_to dashboard_path, alert: "Failed to mark conversation as complete."
     end
   end
 

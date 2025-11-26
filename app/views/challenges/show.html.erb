@@ -2,3 +2,4 @@
 <%= @challenge.conversation["en"] %>
 <%= @challenge.journal.conversation_status %>
 <%= button_to 'Conversation Completed', complete_conversation_journal_path(@journal), method: :patch, class: 'btn btn-success' %>
+<%= @challenge.topic.partnership_topics.find_by(partnership: @partnership).status %>
