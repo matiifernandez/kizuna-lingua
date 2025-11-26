@@ -24,7 +24,9 @@
               <% end %>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-success"><%= link_to "Start lesson", topic_path(topic)  %></button>
+              <%= simple_form_for ([topic, @partnership_topic]) do |f| %>
+                <%= f.submit %>
+              <% end %>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
