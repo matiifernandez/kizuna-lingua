@@ -28,7 +28,7 @@
     <p>Partner's Journal: Complete</p>
     <p>Partner's Conversation challenge: <%= @partner_journal.conversation_status %></p>
     <% if @my_journal && @my_journal.feedback %>
-      <p>Your partner has left you feedback, view it here: <%= link_to "Feedback", partnership_journal_route(@partnership, @most_recent_topic.challenges.first), class: "btn btn-secondary" %></p>
+      <p>Your partner has left you feedback, view it here: <%= link_to "Feedback", partnership_journal_path(@partnership, @my_journal), class: "btn btn-secondary" %></p>
     <% end %>
   <% else %>
     <p>Partner's Journal: Incomplete</p>
