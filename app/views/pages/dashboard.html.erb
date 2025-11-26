@@ -4,11 +4,21 @@
   <h2>Current progress:</h2>
   <% if @my_journal %>
     <p>Your Journal: Complete</p>
-    <p>Your Conversation Challenge: <%= @most_recent_topic.challenges.first.journal.conversation_status %></p>
+    <% if @partner_journal && @my_journal.conversation_status == false %>
+      <p>Your Conversation Challenge: <%= @my_journal.conversation_status %></p>
+      <%= link_to "Do conversation challenge", challenge_path(@most_recent_topic.challenges.first) %>
+    <% elsif @partner_journal && @my_journal.conversation_status == true %>
+      <p>Your Conversation Challenge: Complete</p>
+    <% else %>
+      <p>Your Conversation Challenge: Incomplete</p>
+    <% end %>
     <% if @partner_journal && @partner_journal.feedback %>
       <p>Leave feedback for your partner: Complete</p>
-    <% else %>
+    <% elsif @partner_journal%>
       <p>Leave feedback for your partner: Incomplete</p>
+      <%= link_to "leave feedback", partnership_journal_path(@partnership, @partner_journal) %>
+    <% else %>
+      <p>Waiting for Your partner to submit their journal.</p>
     <% end %>
   <% else %>
     <p>Your Journal: Not Complete</p>
