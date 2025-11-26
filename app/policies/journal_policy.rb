@@ -3,7 +3,7 @@ class JournalPolicy < ApplicationPolicy
     # NOTE: Be explicit about which records you allow access to!
     def resolve
       # It will only return journals from the current user's partnership.
-      user.partnership ? scope.where(partnership: user.partnership) : scope.none
+      scope.where(user: user).order(created_at: :desc)
     end
   end
 

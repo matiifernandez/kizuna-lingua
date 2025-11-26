@@ -1,5 +1,4 @@
 <h1><%= @topic.name %></h1>
-
 <p>
   <% if current_user.learning_language == "japanese" %>
     <%= @topic.content["eng"] %> <br>
@@ -7,15 +6,13 @@
     <%= @topic.content["jpn"] %> <br>
   <% end %>
   <% @grammar_points.each do |grammar_point| %>
-  <hr>
-  <h3><%= grammar_point.title %> (Level: <%= grammar_point.level.capitalize %>)</h3>
-
-  <h4>Explanation:</h4>
-  <p><%= grammar_point.explanation %></p>
-
-  <h4>Examples:</h4>
-  <p><%= grammar_point.examples %></p>
-    <% end %>
+    <hr>
+    <h3><%= grammar_point.title %> (Level: <%= grammar_point.level.capitalize %>)</h3>
+    <h4>Explanation:</h4>
+    <p><%= grammar_point.explanation %></p>
+    <h4>Examples:</h4>
+    <p><%= grammar_point.examples %></p>
+  <% end %>
   <hr>
   <h3>Written Challenge</h3>
 
@@ -26,3 +23,4 @@
     <%= @challenge.content["jp"] %>
   <% end %>
 </p>
+<%= link_to "Submit Written Challenge", new_challenge_journal_path(@challenge) %>
