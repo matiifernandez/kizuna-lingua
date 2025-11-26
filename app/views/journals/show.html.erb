@@ -1,3 +1,38 @@
 <div class="container mt-4">
   <h2>Journal Entry by <%= @journal.user.name %></h2>
+  <p>Challenge: <%= @journal.challenge.topic.name %></p>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      Original Entry:
+    </div>
+    <div class="card-body">
+      <p> <%= simple_format(@journal.content) %></p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      Feedback:
+    </div>
+    <div class="card-body">
+      <% if @journal.feedback.present? %>
+        <p><%= simple_format(@journal.feedback) %></p>
+      <% else %>
+        <p>No feedback submitted yet.</p>
+      <% end %>
+    </div>
+
+  <% if policy(@journal).update? %>
+    <hr>
+    <h5>Submit feedback:</h5>
+    <%= simple_form_for @journal do |f| %>
+      <%= f.input :feedback, as: :text, rows: 5, label: false, placeholder: "Provide feedback to your partner..." %>
+      <%= f.button :submit, "Submit Feedback", class: "btn btn-success" %>
+    <% end %>
+
+  <% end %>
+  </div>
+
+  <%= link_to "Back to all journals", partnership_journals_path(@journal.partnership), class: "btn btn-secondary mt-3" %>
 </div>
