@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
   resources :grammar_points, only: [:show]
   resources :challenges, only: [:show] do
-    resources :journals, only: [:create]
+    resources :journals, only: [:new, :create]
   end
   resources :partnerships, only: [] do
     resources :journals, only: [:index, :show]
