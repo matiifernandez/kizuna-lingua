@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   get "dashboard", to: "pages#dashboard"
   resources :topics, only: [:index, :show] do
     resources :partnership_topics, only: [:create]
+    collection do
+      post :generate
+    end
   end
   resources :journals, only: [:update] do
     member do
