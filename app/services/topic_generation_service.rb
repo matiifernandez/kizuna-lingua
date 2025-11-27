@@ -48,7 +48,7 @@ class TopicGenerationService
       data["grammar_points"].each do |gp_data|
         grammar_point = GrammarPoint.find_or_create_by!(
           title: gp_data["title"],
-          language: gp_data["language"],
+          language: gp_data["language"].downcase,
           level: gp_data["level"]
         ) do |gp|
           gp.explanation = gp_data["explanation"]
