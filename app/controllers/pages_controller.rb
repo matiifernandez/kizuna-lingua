@@ -10,9 +10,9 @@ class PagesController < ApplicationController
     @current_user = current_user
     @partnership = current_user.partnership
     @partner = @partnership.partner_of(current_user)
-    @most_recent = PartnershipTopic.where(status: "in progress").order(created_at: :desc)
+    @most_recent = PartnershipTopic.where(status: "in progress").order(created_at: :desc).first
     if @most_recent.present?
-      @most_recent_topic = @most_recent.first.topic
+      @most_recent_topic = @most_recent.topic
       @challenge = @most_recent_topic.challenges.first
       @my_journal = Journal.find_by(user: current_user, challenge: @challenge, partnership: @partnership)
       @partner_journal = @challenge.partner_journal(current_user)
@@ -30,9 +30,9 @@ class PagesController < ApplicationController
     max_stages = 5
     progress += 1 if my_journal.present?
     progress += 1 if partner_journal.present?
-    progress += 1 if my_journal.feedback.present?
-    progress += 1 if partner_journal.feedback.present?
-    progress += 1 if my_journal.conversation_status.present?
+    progress += 1 if my_journal&.feedback.present?
+    progress += 1 if partner_journal&.feedback.present?
+    progress += 1 if my_journal&.conversation_status.present?
     (progress.to_f / max_stages) * 100
   end
 

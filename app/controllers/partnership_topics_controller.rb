@@ -14,6 +14,17 @@ class PartnershipTopicsController < ApplicationController
     end
   end
 
+  def complete_topic
+    @partnership_topic = PartnershipTopic.find(params[:id])
+    authorize @partnership_topic
+    if @partnership_topic.update!(status: 'completed')
+      flash[:notice] = "Congratulations! Topic '#{@partnership_topic.topic.name}' is now complete!"
+    else
+      flash[:alert] = "Could not mark topic as complete."
+    end
+    redirect_to dashboard_path
+  end
+
   private
 
   def partnership_topic_params

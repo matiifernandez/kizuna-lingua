@@ -15,4 +15,8 @@ class PartnershipTopicPolicy < ApplicationPolicy
     # user.partnership == record.partnership
     true
   end
+
+  def complete_topic?
+    user.partnership == record.partnership
+  end
 end

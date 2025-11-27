@@ -10,6 +10,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   get "dashboard", to: "pages#dashboard"
+  resources :partnership_topics, only: [:update] do
+    member do
+      patch :complete_topic
+    end
+  end
   resources :topics, only: [:index, :show] do
     resources :partnership_topics, only: [:create]
     collection do
@@ -28,5 +33,4 @@ Rails.application.routes.draw do
   resources :partnerships, only: [] do
     resources :journals, only: [:index, :show]
   end
-
 end
