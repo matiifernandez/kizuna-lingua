@@ -1,0 +1,20 @@
+.accordion-button {
+  background: linear-gradient(120deg,#372549,#774C60);
+  color: white;
+}
+
+.accordion-button:hover {
+  background: linear-gradient(120deg,#553745,#774C60);
+  color: white;
+}
+
+.accordion-button:not(.collapsed) {
+  color: white;
+  background: linear-gradient(120deg,#553745,#774C60);
+}
+
+.accordion-item {
+  background: linear-gradient(120deg, #1a1423, #271e35);
+  border-color: #553745;
+  border-radius: 8px;
+}

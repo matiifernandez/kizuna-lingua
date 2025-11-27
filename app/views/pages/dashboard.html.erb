@@ -1,9 +1,11 @@
 <div class="container">
   <% if @most_recent_topic %>
     <div class="topic-background-box mb-3">
-      <div class="topic-card">
-        <div class="topic-name"><%= link_to @most_recent_topic.name, topic_path(@most_recent_topic) %></div>
-      </div>
+      <%= link_to topic_path(@most_recent_topic), class: "status-card-container-link" do %>
+        <div class="topic-card">
+          <div class="topic-name"><%= @most_recent_topic.name %></div>
+        </div>
+      <% end %>
     </div>
     <div class="progress mb-3 rounded-pill" style="height: 25px;">
       <div class="progress-bar rounded-pill bg-success"
@@ -201,6 +203,11 @@
             </div>
           </div>
         </div>
+      </div>
+    <% end %>
+    <%= link_to topics_path, class: "status-card-container-link" do %>
+      <div class="new-topic-card"><img class="new-topic-card-image" src="https://images.unsplash.com/vector-1745246426047-d2ee51f1ba9b?q=80&w=2360&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Card Image">
+        <div class="new-topic-card-text">Change Topic</div>
       </div>
     <% end %>
   <% end %>

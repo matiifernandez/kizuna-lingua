@@ -1,12 +1,13 @@
 .new-topic-card {
     display: flex;
     align-items: center;
-    border: 1px solid #ccc;
+    border: 1px solid #553745;
     border-radius: 8px;
     overflow: hidden;
-    height: 150px;
+    height: 124px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    background-color: #fff
+    background: linear-gradient(120deg,#553745,#774C60);
+    margin-top: 16px;
 }
 
 .new-topic-card-image {
