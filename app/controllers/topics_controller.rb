@@ -11,6 +11,7 @@ class TopicsController < ApplicationController
     user_language = current_user.learning_language
     @grammar_points = @topic.grammar_points.where(level: user_level, language: user_language)
     @challenge = @topic.challenges.first
+    @journal = Journal.new
     authorize @topic
   end
 end
