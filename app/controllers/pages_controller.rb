@@ -30,9 +30,9 @@ class PagesController < ApplicationController
     max_stages = 5
     progress += 1 if my_journal.present?
     progress += 1 if partner_journal.present?
-    progress += 1 if my_journal.feedback.present?
-    progress += 1 if partner_journal.feedback.present?
-    progress += 1 if my_journal.conversation_status.present?
+    progress += 1 if my_journal&.feedback.present?
+    progress += 1 if partner_journal&.feedback.present?
+    progress += 1 if my_journal&.conversation_status.present?
     (progress.to_f / max_stages) * 100
   end
 
