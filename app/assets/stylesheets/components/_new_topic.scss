@@ -1,0 +1,28 @@
+.new-topic-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 150px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #fff
+}
+
+.new-topic-card-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    flex-shrink: 0
+}
+
+.new-topic-card-text {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: left;
+    padding: 0 20px
+}

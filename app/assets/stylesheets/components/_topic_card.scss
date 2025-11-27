@@ -1,0 +1,24 @@
+.topic-background-box {
+    margin-top: 8px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    display: inline-block
+}
+
+.topic-card {
+    width: 100%;
+    height: 200px;
+    background-image: url('https://images.pexels.com/photos/355952/pexels-photo-355952.jpeg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0,0,0,0.7);
+    border-radius: 15px;
+    overflow: hidden
+}
