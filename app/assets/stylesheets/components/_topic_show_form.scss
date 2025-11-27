@@ -1,0 +1,15 @@
+.form-control {
+    border-radius: 10px; /* Rounds the textarea */
+}
+
+.btn-primary {
+    border-radius: 8px; /* Rounds the button */
+    background: linear-gradient(135deg,#372549,#774C60);
+    box-shadow: 0 2px 4px #160f1d,0 5px 10px #1d1317;
+    transition: transform 0.1s ease;
+    border : none;
+}
+
+.btn-primary:hover {
+   transform: scale(1.05)
+}
