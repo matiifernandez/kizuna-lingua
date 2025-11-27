@@ -1,32 +1,39 @@
-<h1><%= @topic.name %></h1>
-<p>
-  <% if current_user.learning_language == "japanese" %>
-    <%= @topic.content["eng"] %> <br>
-  <% elsif current_user.learning_language == "english"%>
-    <%= @topic.content["jpn"] %> <br>
-  <% end %>
-  <% @grammar_points.each do |grammar_point| %>
+<div class="card-container">
+  <div class="card">
+  <h1><%= @topic.name %></h1>
+    <p>
+      <% if current_user.learning_language == "japanese" %>
+        <%= @topic.content["eng"] %> <br>
+      <% elsif current_user.learning_language == "english"%>
+        <%= @topic.content["jpn"] %> <br>
+      <% end %>
+  </div>
+  <div class="card">
+    <% @grammar_points.each do |grammar_point| %>
+      <hr>
+      <h1><%= grammar_point.title %></h1>
+      <h4>Explanation:</h4>
+      <p><%= grammar_point.explanation %></p>
+      <h4>Examples:</h4>
+      <p><%= grammar_point.examples %></p>
+    <% end %>
+  </div>
+  <div class="card">
     <hr>
-    <h3><%= grammar_point.title %> (Level: <%= grammar_point.level.capitalize %>)</h3>
-    <h4>Explanation:</h4>
-    <p><%= grammar_point.explanation %></p>
-    <h4>Examples:</h4>
-    <p><%= grammar_point.examples %></p>
-  <% end %>
-  <hr>
-  <h3>Written Challenge</h3>
+    <h1>Written Challenge</h1>
 
+    <% if current_user.learning_language == "japanese" %>
+      <%= @challenge.content["en"] %>
+    <% elsif current_user.learning_language == "english" %>
+      <%= @challenge.content["jp"] %>
+    <% end %>
+  </p>
+  </div>
 
-  <% if current_user.learning_language == "japanese" %>
-    <%= @challenge.content["en"] %>
-  <% elsif current_user.learning_language == "english" %>
-    <%= @challenge.content["jp"] %>
-  <% end %>
-</p>
-
-<div class="container mt-4">
-  <%= simple_form_for [@challenge, @journal] do |f| %>
-    <%= f.input :content, as: :text, rows: 10, label: false, placeholder: "Write your answers here..." %>
-    <%= f.button :submit, "Submit", class: "btn btn-primary" %>
-  <% end %>
+  <div class="container mt-4">
+    <%= simple_form_for [@challenge, @journal] do |f| %>
+      <%= f.input :content, as: :text, rows: 10, label: false, placeholder: "Write your answers here..." %>
+      <%= f.button :submit, "Submit", class: "btn btn-primary" %>
+    <% end %>
+  </div>
 </div>
