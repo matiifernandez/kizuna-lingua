@@ -23,12 +23,10 @@
     <%= @challenge.content["jp"] %>
   <% end %>
 </p>
-<%= link_to "Submit Written Challenge", new_challenge_journal_path(@challenge) %>
 
 <div class="container mt-4">
-  <h2>Journal entry</h2>
   <%= simple_form_for [@challenge, @journal] do |f| %>
-    <%= f.input :content, as: :text, rows: 10, label: "Write your journal entry here:" %>
-    <%= f.button :submit, "Submit entry", class: "btn btn-primary" %>
+    <%= f.input :content, as: :text, rows: 10, label: false, placeholder: "Write your answers here..." %>
+    <%= f.button :submit, "Submit", class: "btn btn-primary" %>
   <% end %>
 </div>
