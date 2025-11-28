@@ -56,6 +56,13 @@ class TopicGenerationService
         end
         TopicGrammarPoint.create!(topic: new_topic, grammar_point: grammar_point)
       end
+
+      PartnershipTopic.find_or_create_by!(
+        partnership: @user.partnership,
+        topic: new_topic
+      ) do |pt|
+        pt.status = "in progress"
+      end
     end
     { success: true, topic: new_topic }
   end
