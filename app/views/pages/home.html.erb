@@ -1,9 +1,24 @@
 <style>
-body {
-    background-image: url('<%= image_url "kizuna lingua wip.png" %>');
-    background-size: 500px 500px;
-    background-position: center center;
-    background-repeat: no-repeat;
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     min-height: 80vh;
-    }
+}
+
+.home-image {
+    width: 500px;
+    height: 500px;
+}
+
+.home-login {
+    margin-top: 1rem;
+}
 </style>
+
+<div class="home-container">
+  <%= image_tag "kizuna lingua wip.png", class: "home-image", alt: "Kizuna Lingua" %>
+  <p class="home-login">
+    <%= link_to "Login", dashboard_path, class: "btn btn-primary text-decoration-none" %>
+  </p>
+</div>
