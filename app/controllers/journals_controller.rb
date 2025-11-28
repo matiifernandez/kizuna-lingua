@@ -41,12 +41,12 @@ class JournalsController < ApplicationController
   def complete_conversation
     @journal = Journal.find(params[:id])
     authorize @journal
+    @challenge = @journal.challenge
+    @partnership = @journal.partnership
     if @journal.update(conversation_status: true)
-      partner_journal = @journal.challenge.partner_journal(current_user)
+      partner_journal = @challenge.partner_journal(current_user)
       if partner_journal.present?
-        if partner_journal.id != @journal.id
-          partner_journal.update_column(:conversation_status, true)
-        end
+        partner_journal.update_column(:conversation_status, true)
       end
       redirect_to dashboard_path, notice: "Conversation marked as complete."
     else
