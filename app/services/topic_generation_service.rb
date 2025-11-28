@@ -64,12 +64,15 @@ class TopicGenerationService
     <<~PROMPT
     Generate learning content based on an existing topic title for a language-learning partnership.
     - Topic Title: "#{@topic_title}"
-    - User 1 Profile: Level "#{user_one_profile[:level]}", Learning Language "#{user_one_profile[:lang]}"
-    - User 2 Profile: Level "#{user_two_profile[:level]}", Learning Language "#{user_two_profile[:lang]}"
+    - User 1 Profile: Native Language "#{user_one_profile[:native_language]}" Level "#{user_one_profile[:level]}", Learning Language "#{user_one_profile[:lang]}"
+    - User 2 Profile: Native Language "#{user_two_profile[:native_language]}" Level "#{user_two_profile[:level]}", Learning Language "#{user_two_profile[:lang]}"
     Generate:
     1. A single `topic_content` summary in both English and Japanese.
-    2. An array `challenges` with TWO separate challenge objects: one for User 1, one for User 2.
-    3. An array `grammar_points` with 1-2 points for each user's level and language.
+    2. An array challenges with TWO separate, exciting, multi-step challenge objects:
+      - The first challenge MUST be tailored for the User 1 Profile.
+      - The second challenge MUST be tailored for the User 2 Profile.
+    3. An array grammar_points containing a comprehensive list of grammar points relevant to the topic for ALL major levels the names of the levels must be: beginner, intermediate, advanced and fluent. For example, for
+      Japanese.
     PROMPT
   end
 
@@ -85,6 +88,14 @@ class TopicGenerationService
       ],
       "grammar_points": [ { "title": "...", "level": "...", "explanation": "...", "examples": "...", "language": "..." } ]
     }
-    PROMPT
+    CRITICAL RULES FOR "grammar_points":
+    - The "explanation" for a grammar point MUST be in the native language of the learner. For example, if the grammar point's "language" is 'japanese', its "explanation" MUST be
+      in 'english'. If the grammar point's "language" is 'english', its "explanation" MUST be in 'japanese'.
+
+      CRITICAL RULES FOR "challenges":
+      - Challenges must be exciting, creative, and scenario-based. Avoid boring tasks like "translate this".
+      - Good examples: "Imagine you are ordering food at a restaurant...", "Plan a weekend trip with a friend...", "Debate the pros and cons of...".
+      - Challenges should contain multiple steps or questions to guide the user.
+      PROMPT
   end
 end
