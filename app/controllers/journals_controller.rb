@@ -44,7 +44,8 @@ class JournalsController < ApplicationController
     @challenge = @journal.challenge
     @partnership = @journal.partnership
     if @journal.update(conversation_status: true)
-      partner_journal = @challenge.partner_journal(current_user)
+      all_journals = Journal.where(challenge: @challenge, partnership: @partnership)
+      partner_journal = all_journals.find_by("id != ?", @journal.id)
       if partner_journal.present?
         partner_journal.update_column(:conversation_status, true)
       end
