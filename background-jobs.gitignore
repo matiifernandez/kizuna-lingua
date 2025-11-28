@@ -1,0 +1,414 @@
+Background Job
+Push time-consuming processes outside of the controller.
+
+Examples
+Delivering emails
+Calling an API (particularly AI, like OpenAI, since it can be slow)
+Cleaning up
+etc.
+
+
+
+
+
+
+Active Job
+Rails implementation of background job
+
+Generate a job
+rails generate job fake
+# app/jobs/fake_job.rb
+class FakeJob < ApplicationJob
+  queue_as :default
+
+  def perform
+    puts "I'm starting the fake job"
+    sleep 3
+    puts "OK I'm done now"
+  end
+end
+Run the job
+To run the job synchronously:
+
+# rails c
+FakeJob.perform_now
+Even though the method is called perform in the job, you call perform_now to run it synchronously. This is how ActiveJob works.
+
+Asynchronicity
+How to enqueue jobs to run them later
+
+Job scheduler
+We use Solid Queue as the queuing backend. It is simple and efficient and works directly with our SQL database.
+
+Alternatives: Sidekiq, ActiveJob / QueueAdapters. Most of them use Redis, which is a separate dependency.
+
+Install Solid Queue
+# Gemfile
+gem "solid_queue"
+bundle install
+rails generate solid_queue:install
+Creates a config file in config/queue.yml.
+
+# config/application.rb
+# [...]
+class Application < Rails::Application
+  # [...]
+  config.active_job.queue_adapter = :solid_queue
+end
+Single Database Setup
+By default, Solid Queue uses a different database than your main one, but we can configure it to all work from the same db.
+
+Open up db/queue_schema.rb and copy the content between the ActiveRecord::Schema.define do and end.
+rails g migration InstallSolidQueue and paste the copied content into the migration file inside the change method.
+rails db:migrate
+Can now safely delete the db/queue_schema.rb file.
+Remove config.solid_queue.connects_to line from production.rb
+Using Active Job
+Let’s start Solid Queue
+Open a new terminal tab and run:
+
+bin/jobs
+To make things easier, you can run it together with your rails s:
+
+# config/puma.rb
+# [...]
+if ENV['RAILS_ENV'] == 'development'
+  plugin :solid_queue
+end
+Enqueue our first job
+To run the job asynchronously:
+
+# rails c
+FakeJob.perform_later
+Look at the solid_queue process!
+
+Even though the method is called perform in the job, you call perform_later to run it asynchronously.
+
+Arguments
+You can pass arguments to the perform_later method:
+
+rails generate job update_user
+# app/jobs/update_user_job.rb
+class UpdateUserJob < ApplicationJob
+  queue_as :default
+
+  def perform(user)
+    puts "Calling Clearbit API for #{user.email}..."
+    # TODO: perform a time consuming task like Clearbit's Enrichment API.
+    sleep 2
+    puts "Done! Enriched #{user.email} with Clearbit"
+  end
+end
+Global ID (1/2)
+When a Job is enqueued, the arguments are serialized.
+
+ActiveJob uses Global ID to convert user into a String:
+
+# rails c
+User.create(email: "seb@lewagon.org", password: "password")
+user = User.find(1)
+user.to_global_id #=> #<GlobalID:0x000055988bc4dd20 [...] gid://rails-ai-challenges/User/1>>
+serialized_user = user.to_global_id.to_s
+#=> "gid://rails-ai-challenges/User/1"
+Global ID (2/2)
+Before performing the job, ActiveJob deserializes the user in the background:
+
+user = GlobalID.find(serialized_user) #=>  #<User id: 1 [...]>
+
+
+⚠️ If you use another framework for background jobs (e.g. Sidekiq::Worker), pass ids or strings as arguments, not full objects.
+
+Enqueue from a model
+# app/models/user.rb
+class User < ApplicationRecord
+  # [...]
+
+  after_commit :async_update, on: [:create, :update]
+
+  private
+
+  def async_update
+    UpdateUserJob.perform_later(self)
+  end
+end
+Create a new user from the console and look at the terminal window where your jobs are running:
+
+# rails c
+reload!
+User.create(email: "boris@lewagon.org", password: "password")
+Enqueue from a controller
+ℹ️ No livecode for this example. Use this code structure if you need to enqueue a job from a controller:
+
+# app/controllers/profiles_controller.rb
+class ProfilesController < ApplicationController
+  def update
+    if current_user.update(user_params)
+      UpdateUserJob.perform_later(current_user)  # <- The job is queued
+      flash[:notice] = "Your profile has been updated"
+      redirect_to root_path
+    else
+      render :edit
+    end
+  end
+
+  private
+
+  def user_params
+    # Some strong params of your choice
+  end
+end
+Real-Life Example
+The assistant message creation is done in the controller:
+
+# app/controllers/messages_controller
+def create
+  # [...]
+  if @message.save
+    @assistant_message = @chat.messages.create(role: "assistant", content: "")
+
+    if @message.file.attached?
+      process_file(@message.file)
+    else
+      send_question
+    end
+
+    @assistant_message.update(content: @response.content)
+    # [...]
+Refactor with a Job
+API calls are time-consuming, so we should not do them in the web process.
+
+Let’s move them to the background:
+
+rails generate job create_chat_assistant_message
+Assistant message job (1/4)
+# app/jobs/create_chat_assistant_message_job.rb
+def perform(user_message)
+  @message = user_message
+  @chat = user_message.chat
+  @challenge = @chat.challenge
+  @assistant_message = @chat.messages.create(role: "assistant", content: "")
+
+  if @message.file.attached?
+    process_file(@message.file)
+  else
+    send_question
+  end
+
+  @assistant_message.update(content: @response.content)
+  broadcast_replace(@assistant_message)
+
+  @chat.generate_title_from_first_message
+end
+Assistant message job (2/4)
+Let’s now move the assistant message creation code from the controller to the job.
+
+Move the following constants: SYSTEM_PROMPT and BATCH_NUMBER
+
+Move the following methods:
+
+broadcast_replace
+build_conversation_history
+challenge_context
+instructions
+process_file
+send_question
+Assistant message job (3/4)
+The broadcast_replace method needs to be ajusted to a background job context.
+
+# app/jobs/create_chat_assistant_message_job.rb
+class CreateChatAssistantMessageJob < ApplicationJob
+  include ActionView::RecordIdentifier
+
+  # [...]
+
+  private
+
+  def broadcast_replace(message)
+    Turbo::StreamsChannel.broadcast_replace_to(@chat, target: dom_id(message), partial: "messages/message", locals: { message: message })
+  end
+end
+Assistant message job (4/4)
+Check the full file here
+
+Testing
+Let’s check that our code still works as expected by creating a message in the console and calling the job synchronously:
+
+rails c
+chat = Chat.find(1)
+user_message = Message.create(content: "Hello world!", role: "user", chat: chat)
+CreateChatAssistantMessageJob.perform_now(user_message)
+Controller
+And in the controller:
+
+# app/controllers/messages_controller.rb
+def create
+  # [...]
+  if @message.save
+    CreateChatAssistantMessageJob.perform_later(@message)
+
+    respond_to do |format|
+      format.turbo_stream # renders `app/views/messages/create.turbo_stream.erb`
+      format.html { redirect_to chat_path(@chat) }
+    end
+  else
+    # [...]
+  end
+end
+Last touches (1/2)
+Let’s refine the job to also broadcast the title.
+
+# app/jobs/create_chat_assistant_message_job.rb
+def perform(user_message)
+  # [...]
+  @chat.generate_title_from_first_message
+
+  if @chat.title_previously_changed?
+    Turbo::StreamsChannel.broadcast_update_to(@chat, target: "chat_title", content: @chat.title)
+  end
+end
+💡 Note that we can broadcast content without the need of a partial.
+
+Last touches (2/2)
+Let’s remove the title update from the turbo stream view since the background job handles it. The HTTP response now only cleans up the form.
+
+<!-- app/views/messages/create.turbo_stream.erb -->
+<%= turbo_stream.replace "new_message" do %>
+  <%= render "messages/form", chat: @chat, message: Message.new %>
+<% end %>
+Mailers
+No need to write a job, just call deliver_later:
+
+# UserMailer.welcome(user).deliver_now
+
+UserMailer.welcome(user_id).deliver_later
+(Enqueued to the mailers queue)
+
+More about Mailers in Rails
+
+Delay the job
+FakeJob.set(wait: 1.minute).perform_later
+
+FakeJob.set(wait_until: Date.tomorrow.noon).perform_later
+By default, Solid Queue checks for scheduled job every 1 second (see doc)
+
+Tracking Jobs with Mission Control
+Setup
+# Gemfile
+gem "mission_control-jobs"
+bundle install
+# config/application.rb
+# [...]
+config.mission_control.jobs.http_basic_auth_enabled = false
+Add admin to User
+We need an admin role to protect the jobs dashboard:
+
+rails g migration AddAdminToUsers admin:boolean
+# xxx_add_admin_to_users.rb
+[...]
+def change
+  add_column :users, :admin, :boolean, null: false, default: false
+end
+rails db:migrate
+Routes
+# config/routes.rb
+authenticate :user, ->(user) { user.admin? } do
+  mount MissionControl::Jobs::Engine, at: "/jobs"
+end
+Then, visit /jobs in your browser to see the Mission Control web console.
+
+You need to be logged in as an admin user.
+
+Active Job in production
+When you deploy to Heroku, by default, only the rails s web server starts.
+
+But in a bigger project, you don’t want to run the solid_queue process on the same dyno as the web server.
+
+Dyno = one of the containers that run your app on Heroku
+
+Heroku Setup via Procfile
+Add the solid_queue process to the Procfile:
+
+# Procfile
+web: bundle exec puma -C config/puma.rb
+worker: bin/jobs
+The Procfile is a file that tells Heroku what Terminal commands to run to start your app.
+
+Then you must:
+
+Commit
+Deploy
+Go to Heroku Dashboard to set dynos, or with the CLI:
+heroku ps:scale worker=1
+heroku ps # Check worker dyno is running
+Mission Control web
+Run the migrations in prod:
+
+heroku run rails db:migrate
+Launch heroku run rails c and create a new admin user:
+
+User.create(email: "seb@lewagon.org", password: "password", admin: true)
+Sign in as an admin and visit /jobs to access Mission Control web console 🎉
+
+Extra Resources
+The full source code of the lecture is available on GitHub
+
+Additional Topics
+ℹ️ No need for the teacher to teach this part, just here as a resource if you need this in a project.
+
+Rake tasks
+Enqueue from a rake task
+rails g task user update_all
+# lib/tasks/user.rake
+namespace :user do
+  desc "Enrich all users with Clearbit (async)"
+  task update_all: :environment do
+    users = User.all
+    puts "Enqueuing update of #{users.size} users..."
+    users.each do |user|
+      UpdateUserJob.perform_later(user)
+    end
+    # rake task will return when all jobs are _enqueued_ (not done).
+  end
+end
+# Look, there's a new task!
+rails -T | grep user
+
+# We can run it with
+rails user:update_all
+Enqueue from a task with argument
+# lib/tasks/user.rake
+namespace :user do
+
+  # [...]
+  desc "Enrich a given user with Clearbit (sync)"
+  task update: :environment do
+    user = User.find(ENV["USER_ID"])
+    puts "Enriching #{user.email}..."
+    UpdateUserJob.perform_now(user)
+    # rake task will return when job is _done_
+  end
+end
+We can use ENV variables in the terminal. Update user with id 1 with:
+
+USER_ID=1 rails user:update
+Recurring Tasks
+You can schedule jobs to run at regular intervals.
+
+Open config/recurring.yml:
+
+cleanup_task:
+  command: "DeleteStuffJob.clear_all"
+  schedule: every day at 9am
+Will run DeleteStuffJob.clear_all every day at 9am.
+
+(Note: DeleteStuffJob is a placeholder, you need to create the job you actually want to run)
+
+Can also pass arguments:
+
+periodic_job:
+  class: UpdateMessageStatusJob
+  args: [ 42, { status: "declined" } ]
+  schedule: every 10 minutes
+Will run UpdateMessageStatusJob.perform_later(42, status: "declined") every 10 minutes.
+
+The syntax for schedule comes from fugit and is quite flexible.
