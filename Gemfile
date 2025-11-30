@@ -80,3 +80,4 @@ gem 'ostruct'
 gem 'pundit'
 gem "ruby_llm"
 gem 'cloudinary', '~> 1.16.0'
+gem "solid_queue"
