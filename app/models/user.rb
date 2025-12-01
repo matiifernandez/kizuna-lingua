@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_one :partnership_as_one, class_name: "Partnership", foreign_key: "user_one_id"
   has_one :partnership_as_two, class_name: "Partnership", foreign_key: "user_two_id"
   has_many :journals
+  has_many :invite_codes
   has_one_attached :photo
 
   def partnership

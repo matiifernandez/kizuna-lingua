@@ -1,7 +1,9 @@
 <footer class="footer">
   <div class="icon" id="dashboard" tabindex="0"><%= link_to dashboard_path, class: "link" do %><i class="fas fa-home"></i><% end %>
   </div>
-  <div class="icon" id="journal" tabindex="0"><%= link_to partnership_journals_path(current_user.partnership), class: "link" do %><i class="fa-solid fa-book"></i><% end %></div>
+  <% if current_user.partnership != nil %>
+    <div class="icon" id="journal" tabindex="0"><%= link_to partnership_journals_path(current_user.partnership), class: "link" do %><i class="fa-solid fa-book"></i><% end %></div>
+  <% end %>
   <div class="dropup icon">
     <button class="btn p-0 border-0 link icon" type="button"
             id="settingsDropup"
