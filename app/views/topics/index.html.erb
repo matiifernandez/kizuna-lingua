@@ -1,3 +1,4 @@
+<%= turbo_stream_from "topics" %>
 <div class ="card-container">
 <div class="container mt-4 d-flex justify-content-between align-items-center">
   <h1>Topic List</h1>
@@ -7,38 +8,15 @@
 </div>
 
 <div class="container mt-4">
-  <ul class="journal-list" id="itemList">
-    <% @topics.each do |topic| %>
-      <li class="list-group-item list-item"
-          data-bs-toggle="modal"
-          data-bs-target="#itemModal-<%= topic.id %>">
-        <%= topic.name %>
-      </li>
-
-      <div class="modal fade" id="itemModal-<%= topic.id %>" tabindex="-1" aria-labelledby="itemModalLabel-<%= topic.id %>" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3 class="modal-title" id="itemModalLabel-<%= topic.id %>"><%= topic.name %></h3>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <% if current_user.learning_language == "japanese" %>
-                <%= topic.content["eng"] %>
-              <% elsif current_user.learning_language == "english"%>
-                <%= topic.content["jpn"] %>
-              <% end %>
-            </div>
-            <div class="modal-footer">
-              <%= simple_form_for ([topic, @partnership_topic]) do |f| %>
-                <%= f.submit :submit, class: "btn btn-primary" %>
-              <% end %>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
+  <ul class="journal-list" id="topics-list">
+      <% @topics.each do |topic| %>
+        <% content_to_display = if current_user.learning_language == "japanese"
+                                  topic.content["eng"]
+                                else
+                                  topic.content["jpn"]
+                                end %>
+        <%= render "topics/topic", topic: topic, content_to_display: content_to_display, partnership_topic: @partnership_topic %>
+      <% end %>
   </ul>
 </div>
 </div>
