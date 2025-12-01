@@ -1,0 +1,14 @@
+<div class="container">
+  <h2 class="mt-4">Invite a partner to get started!</h2>
+  <div class="invite-code-display">
+    <h3>Give this code to your partner: <strong><%= @invite_code.code %></strong></h3>
+    <p>The code expires on: <%= @invite_code.expires_at.strftime("%Y-%m-%d %H:%M") %></p>
+  </div>
+  <h2>Redeem an Invite Code</h2>
+  <%= form_with url: partnerships_path, method: :post do |f| %>
+    <%= f.label :invite_code, "Enter Partner's Code" %>
+    <%= f.text_field :invite_code, required: true %>
+    <%= f.submit "Create Partnership", class: "btn btn-secondary mt-2" %>
+  <% end %>
+  <%= image_tag 'partner.jpg', alt: "Two arms reach out to hold each other's hand", class: "w-100 mt-4" %>
+</div>
