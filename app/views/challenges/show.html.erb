@@ -1,36 +1,40 @@
-<div class="container" data-controller="timer">
-  <h2 class="mt-3"><%= @topic.name %></h2>
-  <p class="mt-3">
-    <%= @challenge.conversation["en"] %>
+<div class="container" data-controller="timer"
+     data-timer-user-language-value="<%= current_user.native_language %>"
+     data-timer-partner-language-value="<%= current_user.learning_language %>">
+  <h1 class="mt-4 me-4 ms-4"><%= @topic.name %></h1>
+  <p class="mt-3 mb-4 me-4 ms-4">
+    <% if current_user.learning_language == "japanese" %>
+      <%= @challenge.conversation["en"] %>
+    <% elsif current_user.learning_language == "english" %>
+      <%= @challenge.conversation["jp"] %>
+    <% end %>
   </p>
 
-  ---
-
-  <div class="card text-center mb-4">
-    <div class="card-header">
-      <h4 data-timer-target="turnIndicator" class="mb-0 text-primary">
-        Press Start to Begin
-      </h4>
+  <div class="timer-card">
+    <div data-timer-target="turnIndicator" class="timer-indicator user-turn">
+      Press Start to Begin
     </div>
-    <div class="card-body">
-      <h1 class="display-1 fw-bold" data-timer-target="display">
-        00:30
-      </h1>
-
-      <button data-timer-target="startButton" data-action="click->timer#startTimer" class="btn btn-primary btn-lg mt-3">
-        Start Conversation Timer
+    <div class="timer-display" data-timer-target="display">
+      00:30
+    </div>
+    <div class="timer-buttons">
+      <button data-timer-target="startButton"
+              data-action="click->timer#toggleTimer"
+              class="timer-start-btn">
+        Start
+      </button>
+      <button data-action="click->timer#manualSwitch"
+              class="timer-switch-btn">
+        Switch Language
       </button>
     </div>
   </div>
 
-  ---
-
-  <%= button_to 'Conversation Completed',
-                complete_conversation_journal_path(@journal),
-                method: :patch,
-                id: 'completion-form-button',
-                class: 'mt-3 btn btn-success',
-                # You might want to disable this button until the timer sequence is complete
-                disabled: false
-  %>
+  <div class="text-center mt-4">
+    <%= button_to 'Conversation Completed',
+                  complete_conversation_journal_path(@journal),
+                  method: :patch,
+                  id: 'completion-form-button',
+                  class: 'btn btn-primary' %>
+  </div>
 </div>
