@@ -1,5 +1,67 @@
-<div class="container">
-  <h2 class="mt-3">Conversation Challenge</h2>
-  <p class="mt-3"><%= @challenge.conversation["en"] %></p>
-  <%= button_to 'Conversation Completed', complete_conversation_journal_path(@journal), method: :patch, class: 'mt-3 btn btn-success' %>
+<div class="container" data-controller="timer"
+     data-timer-user-language-value="<%= current_user.native_language %>"
+     data-timer-partner-language-value="<%= current_user.learning_language %>">
+  <h1 class="mt-4 me-4 ms-4"><%= @topic.name %></h1>
+  <p class="mt-3 mb-4 me-4 ms-4">
+    <% if current_user.learning_language == "japanese" %>
+      <%= @challenge.conversation["en"] %>
+    <% elsif current_user.learning_language == "english" %>
+      <%= @challenge.conversation["jp"] %>
+    <% end %>
+  </p>
+
+  <div class="timer-card">
+    <div data-timer-target="turnIndicator" class="timer-indicator user-turn">
+      Press Start to Begin
+    </div>
+    <div class="timer-display" data-timer-target="display">
+      00:30
+    </div>
+    <div class="timer-buttons">
+      <button data-timer-target="startButton"
+              data-action="click->timer#toggleTimer"
+              class="timer-start-btn">
+        <i class="fa-solid fa-pause d-none" data-timer-target="pauseIcon"></i>
+        <i class="fa-solid fa-play" data-timer-target="playIcon"></i>
+      </button>
+      <button data-action="click->timer#manualSwitch"
+              class="timer-switch-btn">
+        Switch Language
+      </button>
+    </div>
+  </div>
+
+  <div class="hint-accordion-container">
+    <div class="accordion" id="hintAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="hintHeading">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hintCollapse" aria-expanded="false" aria-controls="hintCollapse">
+          Click here for a hint
+        </button>
+      </h2>
+      <div id="hintCollapse" class="accordion-collapse collapse" aria-labelledby="hintHeading">
+        <div class="accordion-body">
+          <% @grammar_points.each do |grammar_point| %>
+            <div class="mb-3">
+              <h5><%= grammar_point.title %> <span class="badge bg-secondary"><%= grammar_point.level %></span></h5>
+              <p><strong>Explanation:</strong> <%= grammar_point.explanation %></p>
+              <p><strong>Examples:</strong> <%= grammar_point.examples %></p>
+            </div>
+            <% unless grammar_point == @grammar_points.last %>
+              <hr>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <%= button_to 'Conversation Completed',
+                  complete_conversation_journal_path(@journal),
+                  method: :patch,
+                  id: 'completion-form-button',
+                  class: 'btn btn-primary' %>
+  </div>
 </div>
