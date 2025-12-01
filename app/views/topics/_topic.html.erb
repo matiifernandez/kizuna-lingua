@@ -1,0 +1,25 @@
+<div id="<%= dom_id(topic) %>">
+  <li class="list-group-item list-item" data-bs-toggle="modal" data-bs-target="#itemModal-<%= topic.id %>">
+    <%= topic.name %>
+  </li>
+
+  <div class="modal fade" id="itemModal-<%= topic.id %>" tabindex="-1" aria-labelledby="itemModalLabel-<%= topic.id %>" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="itemModalLabel-<%= topic.id %>"><%= topic.name %></h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <%= simple_format(content_to_display) %>
+        </div>
+        <div class="modal-footer">
+          <%= simple_form_for ([topic, partnership_topic]) do |f| %>
+            <%= f.submit :submit, class: "btn btn-primary" %>
+          <% end %>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
