@@ -77,6 +77,10 @@
     box-shadow: 0 4px 12px rgba(#3D88BA, 0.4);
     background: linear-gradient(120deg, darken(#3D88BA, 5%), darken(#5AA0CC, 5%));
   }
+
+  i {
+    font-size: 2rem;
+  }
 }
 
 .hint-accordion-container {
