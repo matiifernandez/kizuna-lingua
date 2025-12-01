@@ -1,5 +1,5 @@
 <div class="card-container">
-  <div class="card">
+  <div class="ms-4 me-4">
   <h1><%= @topic.name %></h1>
     <p>
       <% if current_user.learning_language == "japanese" %>
@@ -8,17 +8,29 @@
         <%= @topic.content["jpn"] %> <br>
       <% end %>
   </div>
-  <div class="card">
-    <% @grammar_points.each do |grammar_point| %>
-      <hr>
-      <h1><%= grammar_point.title %></h1>
-      <h4>Explanation:</h4>
-      <p><%= grammar_point.explanation %></p>
-      <h4>Examples:</h4>
-      <p><%= grammar_point.examples %></p>
+  <div class="accordion" id="grammarPointsAccordion">
+    <% @all_grammar_points_by_level.each do |level, grammar_points| %>
+      <% is_user_level = @user_level_terms.any? { |term| level.downcase.include?(term) } %>
+      <% grammar_points.each_with_index do |grammar_point, index| %>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading<%= level.parameterize %><%= index %>">
+            <button class="accordion-button <%= 'collapsed' unless is_user_level %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= level.parameterize %><%= index %>" aria-expanded="<%= is_user_level %>" aria-controls="collapse<%= level.parameterize %><%= index %>">
+              <%= grammar_point.title %> <span class="ms-2 badge bg-secondary"><%= level %></span>
+            </button>
+          </h2>
+          <div id="collapse<%= level.parameterize %><%= index %>" class="accordion-collapse collapse <%= 'show' if is_user_level %>" aria-labelledby="heading<%= level.parameterize %><%= index %>">
+            <div class="accordion-body">
+              <h4>Explanation:</h4>
+              <p><%= grammar_point.explanation %></p>
+              <h4>Examples:</h4>
+              <p><%= grammar_point.examples %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
     <% end %>
   </div>
-  <div class="card">
+  <div class="ms-4 me-4">
     <hr>
     <h1>Written Challenge</h1>
 

@@ -15,6 +15,39 @@
 
 .accordion-item {
   background: linear-gradient(120deg, #1a1423, #271e35);
-  border-color: #553745;
+  border: none !important;
   border-radius: 8px;
+  margin-bottom: 0 !important;
+}
+
+.accordion {
+  margin: 0 !important;
+  width: 90%;
+}
+
+.accordion-body {
+  color: white;
+  border: none !important;
+}
+
+.accordion-button {
+  border: none !important;
+  outline: none !important;
+
+  &:focus {
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  &:not(.collapsed) {
+    box-shadow: none !important;
+  }
+}
+
+.accordion-collapse {
+  border: none !important;
+}
+
+.accordion-header {
+  border: none !important;
 }
