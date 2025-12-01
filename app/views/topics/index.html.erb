@@ -7,8 +7,8 @@
   </button>
 </div>
 <%# Search Form %>
-<div class="container mt-4">
-  <%= simple_form_for :search, url: topics_path, method: :get, html: { class: "d-flex", data: { controller: "search-form" } } do |f| %>
+<div class="container mt-4" id="search-container" data-turbo-permanent>
+  <%= simple_form_for :search, url: topics_path, method: :get, html: { class: "d-flex", data: { controller: "search-form", turbo_frame: "topics_list" } } do |f| %>
     <%= f.input :query, label: false, wrapper: false, input_html: {class: "form-control", placeholder: "Search topics...", value: params[:search].try(:[], :query), data: { action: "input->search-form#submit" }} %>
   <% end %>
 </div>
