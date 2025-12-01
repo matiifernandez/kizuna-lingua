@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["display", "startButton", "turnIndicator"]
+  static targets = ["display", "startButton", "turnIndicator", "playIcon", "pauseIcon"]
 
   static values = {
-    duration: { type: Number, default: 10 },
+    duration: { type: Number, default: 120 },
     userLanguage: { type: String, default: "Your Language" },
     partnerLanguage: { type: String, default: "Partner's Language" }
   }
@@ -26,7 +26,8 @@ export default class extends Controller {
 
   startTimer() {
     this.isTimerRunning = true
-    this.startButtonTarget.textContent = "Pause"
+    this.playIconTarget.classList.add('d-none')
+    this.pauseIconTarget.classList.remove('d-none')
     this.setTurnIndicator(this.isPartnerTurn)
 
     this.timerInterval = setInterval(() => {
@@ -44,7 +45,8 @@ export default class extends Controller {
       clearInterval(this.timerInterval)
     }
     this.isTimerRunning = false
-    this.startButtonTarget.textContent = "Resume"
+    this.pauseIconTarget.classList.add('d-none')
+    this.playIconTarget.classList.remove('d-none')
   }
 
   stopTimer() {
