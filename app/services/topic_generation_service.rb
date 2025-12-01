@@ -122,7 +122,7 @@ class TopicGenerationService
 
       CRITICAL RULES FOR "grammar_points":
       - The 'grammar_points' array MUST contain grammar for both "english" and "japanese" languages.
-      - The array MUST contain a minimum of **one** and a maximum of **three** distinct grammar points for **EACH** of the following levels: **beginner, intermediate, and advanced**. (This means a total minimum of 6 points and a total maximum of 18 points).
+      - The array MUST contain a minimum of **one** and a maximum of **two** distinct grammar points for **EACH** of the following levels: **beginner, intermediate, and advanced**. (This means a total minimum of 6 points and a total maximum of 12 points).
 
       - The "explanation" for a grammar point **MUST** be written in the language **OPPOSITE** to the grammar point's "language" field:
           - If "language" is **"english"**, the "explanation" MUST be in **Japanese**.
