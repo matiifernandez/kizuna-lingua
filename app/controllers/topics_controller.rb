@@ -9,6 +9,14 @@ class TopicsController < ApplicationController
     end
     @partnership = current_user.partnership
     @partnership_topic = PartnershipTopic.new
+
+    # Get status for each topic for the current partnership
+    if @partnership
+      @topic_statuses = PartnershipTopic.where(partnership: @partnership)
+                                        .index_by(&:topic_id)
+    else
+      @topic_statuses = {}
+    end
   end
 
   def show

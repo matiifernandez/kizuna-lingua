@@ -1,49 +1,48 @@
 <%= turbo_stream_from "topics" %>
-<div class ="card-container">
-<div class="container mt-4 d-flex justify-content-between align-items-center">
-  <h1>Topic List</h1>
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTopicModal">
-    Create a new topic
-  </button>
-</div>
-<%# Search Form %>
-<div class="container mt-4" id="search-container" data-turbo-permanent>
-  <%= simple_form_for :search, url: topics_path, method: :get, html: { class: "d-flex", data: { controller: "search-form", turbo_frame: "topics_list" } } do |f| %>
-    <%= f.input :query, label: false, wrapper: false, input_html: {class: "form-control", placeholder: "Search topics...", value: params[:search].try(:[], :query), data: { action: "input->search-form#submit" }} %>
-  <% end %>
-</div>
-<%# Topics List %>
-<div class="container mt-4">
-  <ul class="journal-list" id="topics-list">
-      <% @topics.each do |topic| %>
-        <% content_to_display = if current_user.learning_language == "japanese"
-                                  topic.content["eng"]
-                                else
-                                  topic.content["jpn"]
-                                end %>
-        <%= render "topics/topic", topic: topic, content_to_display: content_to_display, partnership_topic: @partnership_topic %>
-      <% end %>
+<div class="topics-index-container">
+  <div class="topics-header">
+    <h1>Topic List</h1>
+    <button type="button" class="create-topic-btn" data-bs-toggle="modal" data-bs-target="#newTopicModal">
+      Create a new topic
+    </button>
+  </div>
+
+  <div class="topics-search-container" id="search-container" data-turbo-permanent>
+    <%= simple_form_for :search, url: topics_path, method: :get, html: { class: "d-flex", data: { controller: "search-form", turbo_frame: "topics_list" } } do |f| %>
+      <%= f.input :query, label: false, wrapper: false, input_html: {class: "form-control", placeholder: "Search topics...", value: params[:search].try(:[], :query), data: { action: "input->search-form#submit" }} %>
+    <% end %>
+  </div>
+
+  <ul class="topics-list" id="topics-list">
+    <% @topics.each do |topic| %>
+      <% content_to_display = if current_user.learning_language == "japanese"
+                                topic.content["eng"]
+                              else
+                                topic.content["jpn"]
+                              end %>
+      <% topic_status = @topic_statuses[topic.id]&.status || "not started" %>
+      <%= render "topics/topic", topic: topic, content_to_display: content_to_display, partnership_topic: @partnership_topic, topic_status: topic_status %>
+    <% end %>
   </ul>
 </div>
-</div>
 
-  <%# New Topic Modal %>
-<div class="modal fade" id="newTopicModal" tabindex="-1" aria-labelledby="newTopicModalLabel" aria-hidden="true">
+<%# New Topic Modal %>
+<div class="modal fade topic-modal" id="newTopicModal" tabindex="-1" aria-labelledby="newTopicModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="newTopicModalLabel">Generate a New Topic with AI</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    <div class="modal-body">
-      <%= simple_form_for :topic, url: generate_topics_path, method: :post, 'data-turbo': false do |f| %>
-        <%= f.input :name, label: "Suggest a Topic Title:", placeholder: "e.g., 'Planning a Trip', 'Favorite Books'", required: true %>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <%= f.button :submit, "Generate Topic", class: "btn btn-primary", data: { disable_with: "Generating..." } %>
+      <div class="modal-body">
+        <%= simple_form_for :topic, url: generate_topics_path, method: :post, 'data-turbo': false do |f| %>
+          <%= f.input :name, label: "Suggest a Topic Title:", placeholder: "e.g., 'Planning a Trip', 'Favorite Books'", required: true %>
+          <div class="modal-footer">
+            <button type="button" class="close-topic-btn" data-bs-dismiss="modal">Close</button>
+            <%= f.button :submit, "Generate Topic", class: "create-topic-btn", data: { disable_with: "Generating..." } %>
+          </div>
+        <% end %>
       </div>
-      <% end %>
-    </div>
     </div>
   </div>
 </div>

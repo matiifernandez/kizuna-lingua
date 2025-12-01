@@ -1,9 +1,26 @@
 <div id="<%= dom_id(topic) %>">
-  <li class="list-group-item list-item" data-bs-toggle="modal" data-bs-target="#itemModal-<%= topic.id %>">
-    <%= topic.name %>
+  <li class="topic-list-item" data-bs-toggle="modal" data-bs-target="#itemModal-<%= topic.id %>">
+    <div class="topic-card-header">
+      <% if topic_status == "in progress" %>
+        <span class="topic-status-badge status-started">Started</span>
+      <% elsif topic_status == "completed" %>
+        <span class="topic-status-badge status-completed"><i class="fa-solid fa-check"></i> Completed</span>
+      <% end %>
+      <h3 class="topic-card-title"><%= topic.name %></h3>
+    </div>
+    <div class="topic-card-footer">
+      <span class="topic-card-status">Status: <%= topic_status.titleize %></span>
+      <% if topic_status == "completed" %>
+        <span class="topic-card-btn">Review Topic</span>
+      <% elsif topic_status == "in progress" %>
+        <span class="topic-card-btn">Continue</span>
+      <% else %>
+        <span class="topic-card-btn">Start Topic</span>
+      <% end %>
+    </div>
   </li>
 
-  <div class="modal fade" id="itemModal-<%= topic.id %>" tabindex="-1" aria-labelledby="itemModalLabel-<%= topic.id %>" aria-hidden="true">
+  <div class="modal fade topic-modal" id="itemModal-<%= topic.id %>" tabindex="-1" aria-labelledby="itemModalLabel-<%= topic.id %>" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -15,9 +32,9 @@
         </div>
         <div class="modal-footer">
           <%= simple_form_for ([topic, partnership_topic]) do |f| %>
-            <%= f.submit :submit, class: "btn btn-primary" %>
+            <%= f.submit "Select Topic", class: "create-topic-btn" %>
           <% end %>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="close-topic-btn" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
