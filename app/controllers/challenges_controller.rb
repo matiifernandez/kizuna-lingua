@@ -1,8 +1,8 @@
 class ChallengesController < ApplicationController
 
   def show
-    @topic = Topic.find(params[:id])
     @challenge = Challenge.find(params[:id])
+    @topic = @challenge.topic
     @journal = @challenge.journal
     @partner_journal = @challenge.partner_journal(current_user)
     @partnership = current_user.partnership
