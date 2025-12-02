@@ -3,7 +3,7 @@ class TopicsController < ApplicationController
     base_scope = policy_scope(Topic)
     search_query = params.dig(:search, :query)
     if search_query.present?
-      @topics = base_scope.where("name ILIKE ?", "%#{search_query}%")
+      @topics = base_scope.where("name ILIKE ?", "%#{search_query}%").order(created_at: :desc)
     else
       @topics = base_scope.order(created_at: :desc)
     end
@@ -20,7 +20,7 @@ class TopicsController < ApplicationController
 
     # Filter by status if specified
     if params[:status].present?
-      @topics = @topics.select do |topic|
+      @topics = @topics.to_a.select do |topic|
         topic_status = @topic_statuses[topic.id]&.status || "not started"
         case params[:status]
         when "not_started"
