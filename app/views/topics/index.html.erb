@@ -7,17 +7,17 @@
     </button>
   </div>
 
-  <div class="topics-search-container" id="search-container" data-turbo-permanent>
-    <%= simple_form_for :search, url: topics_path, method: :get, html: { class: "d-flex", data: { controller: "search-form", turbo_frame: "topics_list" } } do |f| %>
+  <div class="topics-search-container" id="search-container">
+    <%= simple_form_for :search, url: topics_path, method: :get, html: { class: "d-flex", data: { controller: "search-form" } } do |f| %>
       <%= f.input :query, label: false, wrapper: false, input_html: {class: "form-control", placeholder: "Search topics...", value: params[:search].try(:[], :query), data: { action: "input->search-form#submit" }} %>
     <% end %>
   </div>
 
   <div class="topics-filter-container">
-    <%= link_to "All", topics_path(status: nil, search: params[:search]), class: "filter-btn #{'active' if params[:status].blank?}" %>
-    <%= link_to "Not Started", topics_path(status: "not_started", search: params[:search]), class: "filter-btn #{'active' if params[:status] == 'not_started'}" %>
-    <%= link_to "In Progress", topics_path(status: "in_progress", search: params[:search]), class: "filter-btn #{'active' if params[:status] == 'in_progress'}" %>
-    <%= link_to "Completed", topics_path(status: "completed", search: params[:search]), class: "filter-btn #{'active' if params[:status] == 'completed'}" %>
+    <%= link_to "All", topics_path(status: nil, search: { query: params.dig(:search, :query) }), class: "filter-btn #{'active' if params[:status].blank?}" %>
+    <%= link_to "Not Started", topics_path(status: "not_started", search: { query: params.dig(:search, :query) }), class: "filter-btn #{'active' if params[:status] == 'not_started'}" %>
+    <%= link_to "In Progress", topics_path(status: "in_progress", search: { query: params.dig(:search, :query) }), class: "filter-btn #{'active' if params[:status] == 'in_progress'}" %>
+    <%= link_to "Completed", topics_path(status: "completed", search: { query: params.dig(:search, :query) }), class: "filter-btn #{'active' if params[:status] == 'completed'}" %>
   </div>
 
   <ul class="topics-list" id="topics-list">
