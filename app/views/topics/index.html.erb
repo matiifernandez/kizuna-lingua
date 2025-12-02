@@ -8,11 +8,12 @@
   </div>
 
   <div class="topics-search-container" id="search-container">
-    <%= simple_form_for :search, url: topics_path, method: :get, html: { class: "d-flex", data: { controller: "search-form" } } do |f| %>
+    <%= simple_form_for :search, url: topics_path, method: :get, html: { class: "d-flex", data: { controller: "search-form", turbo_frame: "topics_list" } } do |f| %>
       <%= f.input :query, label: false, wrapper: false, input_html: {class: "form-control", placeholder: "Search topics...", value: params[:search].try(:[], :query), data: { action: "input->search-form#submit" }} %>
     <% end %>
   </div>
 
+  <%= turbo_frame_tag "topics_list" do %>
   <div class="topics-filter-container">
     <%= link_to "All", topics_path(status: nil, search: { query: params.dig(:search, :query) }), class: "filter-btn #{'active' if params[:status].blank?}" %>
     <%= link_to "Not Started", topics_path(status: "not_started", search: { query: params.dig(:search, :query) }), class: "filter-btn #{'active' if params[:status] == 'not_started'}" %>
@@ -31,6 +32,7 @@
       <%= render "topics/topic", topic: topic, content_to_display: content_to_display, partnership_topic: @partnership_topic, topic_status: topic_status %>
     <% end %>
   </ul>
+  <% end %>
 </div>
 
 <%# New Topic Modal %>
