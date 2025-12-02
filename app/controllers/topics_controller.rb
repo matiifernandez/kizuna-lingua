@@ -17,6 +17,23 @@ class TopicsController < ApplicationController
     else
       @topic_statuses = {}
     end
+
+    # Filter by status if specified
+    if params[:status].present?
+      @topics = @topics.select do |topic|
+        topic_status = @topic_statuses[topic.id]&.status || "not started"
+        case params[:status]
+        when "not_started"
+          topic_status == "not started"
+        when "in_progress"
+          topic_status == "in progress"
+        when "completed"
+          topic_status == "completed"
+        else
+          true
+        end
+      end
+    end
   end
 
   def show

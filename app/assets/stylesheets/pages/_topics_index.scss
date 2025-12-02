@@ -1,25 +1,31 @@
 .topics-index-container {
   padding: 20px;
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .topics-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   padding: 0 10px;
 
-  h1 {
+  h2 {
     margin: 0;
-    color: #3D88BA;
+    font-size: 1.5rem;
+    background: linear-gradient(120deg, #3D88BA, #774C60);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
   }
 }
 
 .topics-search-container {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  // background: $light-gray;
+  flex-shrink: 0;
   margin-bottom: 24px;
   padding: 10px 10px;
 
@@ -36,6 +42,36 @@
   }
 }
 
+.topics-filter-container {
+  display: flex;
+  gap: 8px;
+  padding: 0 10px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+  overflow-x: auto;
+
+  .filter-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    background: none;
+    color: rgba(255, 255, 255, 0.7);
+    border: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &.active {
+      color: #3D88BA;
+      font-weight: 600;
+    }
+  }
+}
+
 .topics-list {
   list-style: none;
   padding: 0;
@@ -43,6 +79,9 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 100px;
 }
 
 .topic-list-item {
