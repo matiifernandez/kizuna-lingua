@@ -10,6 +10,8 @@ export default class extends Controller {
 
   connect() {
     this.showAlert();
+    // Remove the element after showing to prevent re-triggering on Turbo navigation
+    this.element.remove();
   }
 
   showAlert() {
