@@ -22,8 +22,12 @@
   </head>
   <body data-controller="notification-panel">
     <% if current_user %>
-      <%# Fullscreen Notification Panel (controlled by Stimulus) %>
-      <div data-notification-panel-target="panel" class="notification-panel-container hidden">
+      <%# Overlay for closing panel by clicking outside %>
+      <div data-notification-panel-target="overlay"
+           data-action="click->notification-panel#toggle"
+           class="notification-overlay"></div>
+      <%# Notification Panel (controlled by Stimulus) %>
+      <div data-notification-panel-target="panel" class="notification-panel-container">
         <div class="notification-panel-header">
           <h3>Notifications</h3>
           <a href="#" data-action="click->notification-panel#toggle" class="close-panel-btn">&times;</a>

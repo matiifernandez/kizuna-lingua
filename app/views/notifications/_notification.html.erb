@@ -4,7 +4,7 @@
 
 <div class="notification-item <%= 'unread' unless notification.read? %>">
   <%= link_to notification_path(notification), class: "notification-link" do %>
-    <% case notification.type %>
+    <% case notification.event.type %>
     <% when "JournalSubmittedNotification" %>
       <p>
         <strong><%= notification.params[:journal].user.name %></strong> has submitted a new journal for the topic
@@ -12,18 +12,18 @@
       </p>
     <% when "JournalFeedbackNotification" %>
       <p>
-        Your partner <strong><%= notification.params[:journal].partner.name %></strong> has provided feedback on your journal for the topic
+        Your partner <strong><%= notification.params[:journal].user.partner.name %></strong> has provided feedback on your journal for the topic
         "<strong><%= notification.params[:journal].challenge.topic.name %></strong>".
       </p>
     <% when "JournalReminderNotification" %>
       <p>
-        Your partner <strong><%= notification.params[:journal].partner.name %></strong>
+        Your partner <strong><%= notification.params[:journal].user.partner.name %></strong>
         is reminding you to complete your journal for the topic
         "<strong><%= notification.params[:journal].challenge.topic.name %></strong>".
       </p>
     <% else %>
       <p>
-        You have a new notification: <%= notification.type %>
+        You have a new notification: <%= notification.event.type %>
       </p>
     <% end %>
     <small class="text-muted"><%= time_ago_in_words(notification.created_at) %> ago</small>
