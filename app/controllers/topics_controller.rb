@@ -22,7 +22,11 @@ class TopicsController < ApplicationController
   def show
     @topic = Topic.find(params[:id])
     user_language = current_user.learning_language
-    search_level = current_user.learning_level.downcase
+    @user_level = current_user.learning_level.downcase
+    @filtered_grammar_points = @topic.grammar_points
+                                 .where(language: user_language)
+                                 .where(level: @user_level)
+                                 .order(:id)
 
     level_search_terms = case current_user.learning_level.downcase
                         when 'fluent'
