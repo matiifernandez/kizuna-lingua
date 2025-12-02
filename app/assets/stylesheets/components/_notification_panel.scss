@@ -100,15 +100,12 @@ body.no-scroll {
   padding: 1rem;
   margin-bottom: 0.5rem;
   border-radius: 8px;
-  transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
   background: linear-gradient(120deg, #3D88BA, #5AA0CC);
+  opacity: 0.5;
 
   &.unread {
-    background: linear-gradient(120deg, #DE5860, #E87A80);
-
-    p, small {
-      color: white;
-    }
+    opacity: 1;
   }
 
   &:hover {
