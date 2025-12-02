@@ -77,10 +77,13 @@ class TopicGenerationService
   end
 
   def generate_image
-     prompt = "A simple, clean illustration representing the concept of '#{@topic_title}' for language learning. Minimalist style, suitable as a topic header image. Do not include any words or letters."
-     image_chat = RubyLLM.chat(model: "gemini-2.5-flash-image")
-     reply = image_chat.ask(prompt)
-     reply.content[:attachments][0].source
+    prompt = "A simple, clean illustration representing the concept of '#{@topic_title}' for language learning. Minimalist style, suitable as a topic header image. Do not include any words or letters."
+    image_chat = RubyLLM.chat(model: "gemini-2.5-flash-image")
+    reply = image_chat.ask(prompt)
+    reply.content[:attachments][0].source
+  rescue => e
+    Rails.logger.error("Image generation failed for topic '#{@topic_title}': #{e.message}")
+    nil
   end
 
   def create_user_prompt(user_one_profile, user_two_profile)
