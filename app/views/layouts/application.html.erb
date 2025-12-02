@@ -32,7 +32,7 @@
           <h3>Notifications</h3>
           <a href="#" data-action="click->notification-panel#toggle" class="close-panel-btn">&times;</a>
         </div>
-        <div class="notification-panel-body" data-notification-panel-target="notifications">
+        <div class="notification-panel-body" data-notification-panel-target="notifications" id="notifications-list">
           <% @notifications.each do |notification| %>
             <%= render partial: "notifications/notification", locals: { notification: notification } %>
           <% end %>

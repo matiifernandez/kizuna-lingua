@@ -9,9 +9,7 @@
   <div class="icon" id="notifications" tabindex="0">
     <a href="#" class="link" data-action="click->notification-panel#toggle">
       <i class="fas fa-bell"></i>
-      <% if @notifications.unread.any? %>
-        <span class="notification-badge" data-notification-panel-target="count"><%= @notifications.unread.count %></span>
-      <% end %>
+      <%= render "notifications/badge", count: @notifications.unread.count %>
     </a>
   </div>
 
