@@ -1,13 +1,13 @@
 <div style="height: calc(100vh - 56px); height: calc(100dvh - 56px); display: flex; flex-direction: column; background: #F8FAFC;">
   <!-- Header Section -->
-  <header style="background: linear-gradient(135deg, #1E293B 0%, #475569 100%); padding: 1rem; flex-shrink: 0;">
-    <div style="display: flex; align-items: center; gap: 0.75rem; max-width: 1000px; margin: 0 auto;">
-      <%= link_to partnership_journals_path(@journal.partnership), style: "display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; background: rgba(255,255,255,0.1); border-radius: 50%; color: white; text-decoration: none; flex-shrink: 0;" do %>
-        <i class="fas fa-arrow-left" style="font-size: 0.875rem;"></i>
+  <header style="background: linear-gradient(135deg, #1E293B 0%, #475569 100%); padding: 1.5rem 1rem; flex-shrink: 0;">
+    <div style="display: flex; align-items: flex-start; gap: 1rem; max-width: 1000px; margin: 0 auto;">
+      <%= link_to partnership_journals_path(@journal.partnership), style: "display: flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; background: rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; text-decoration: none; flex-shrink: 0;" do %>
+        <i class="fas fa-arrow-left" style="font-size: 1rem;"></i>
       <% end %>
       <div style="flex: 1; min-width: 0;">
-        <h1 style="font-size: 1.125rem; font-weight: 700; color: white; margin: 0; line-height: 1.2;"><%= @journal.challenge.topic.name %></h1>
-        <p style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin: 0.25rem 0 0 0;"><%= @journal.created_at.strftime("%B %d, %Y") %></p>
+        <h1 style="font-size: 1.5rem; font-weight: 700; color: white; margin: 0 0 0.25rem 0; line-height: 1.2;"><%= @journal.challenge.topic.name %></h1>
+        <p style="font-size: 0.875rem; color: rgba(255,255,255,0.7); margin: 0;"><%= @journal.created_at.strftime("%B %d, %Y") %></p>
       </div>
     </div>
   </header>
@@ -92,16 +92,18 @@
   <% if policy(@journal).update? %>
     <footer style="flex-shrink: 0; background: white; padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; box-shadow: 0 -4px 16px rgba(30,41,59,0.05);">
       <%= simple_form_for @journal, html: { style: "max-width: 1000px; margin: 0 auto;" } do |f| %>
-        <div style="display: flex; align-items: flex-end; gap: 1rem; background: #F8FAFC; border-radius: 1rem; padding: 0.75rem 0.75rem 0.75rem 1.25rem; border: 1px solid #E2E8F0;">
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; background: #F8FAFC; border-radius: 1rem; padding: 1rem; border: 1px solid #E2E8F0;">
           <%= f.input :feedback, as: :text, label: false, input_html: {
-            style: "flex: 1; border: none; background: transparent; font-size: 1rem; color: #334155; resize: none; min-height: 1.5rem; max-height: 150px; line-height: 1.6; outline: none;",
+            style: "width: 100%; border: none; background: transparent; font-size: 1rem; color: #334155; resize: none; min-height: 80px; line-height: 1.6; outline: none;",
             placeholder: "Write your feedback...",
-            rows: 1
+            rows: 3
           }, wrapper: false %>
-          <button type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #20B2AA 0%, #3CCDC5 100%); border: none; border-radius: 0.75rem; color: white; cursor: pointer; flex-shrink: 0; font-size: 0.875rem; font-weight: 600; gap: 0.5rem;">
-            <span>Send Feedback</span>
-            <i class="fas fa-paper-plane" style="font-size: 0.75rem;"></i>
-          </button>
+          <div style="display: flex; justify-content: flex-end;">
+            <button type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #20B2AA 0%, #3CCDC5 100%); border: none; border-radius: 0.75rem; color: white; cursor: pointer; flex-shrink: 0; font-size: 0.875rem; font-weight: 600; gap: 0.5rem;">
+              <span>Send Feedback</span>
+              <i class="fas fa-paper-plane" style="font-size: 0.75rem;"></i>
+            </button>
+          </div>
         </div>
       <% end %>
     </footer>
