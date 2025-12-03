@@ -1,25 +1,102 @@
-<div class="container mt-4">
-  <div class ="card-container">
-  <h1>Your Journals</h1>
-  <% if @journals.any? %>
-    <div class="journal-list">
-      <% @journals.each do |journal| %>
-        <%= link_to partnership_journal_path(journal.partnership, journal), class: "list-group-item list-group-item-action flex-column align-items-start" do %>
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1"><%= journal.challenge.topic.name %></h5>
-            <small><%= time_ago_in_words(journal.created_at) %> ago</small>
+<div class="journals-index">
+  <!-- Header Section -->
+  <header class="journals-index__header">
+    <div class="journals-index__header-content">
+      <%= link_to dashboard_path, class: "journals-index__back" do %>
+        <i class="fas fa-arrow-left"></i>
+      <% end %>
+      <div class="journals-index__title-group">
+        <h1 class="journals-index__title">Your Journals</h1>
+        <p class="journals-index__subtitle">Track your writing journey</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="journals-index__main">
+    <% if @journals.any? %>
+      <!-- Stats Cards -->
+      <div class="journals-stats">
+        <div class="journals-stat journals-stat--total">
+          <div class="journals-stat__icon">
+            <i class="fas fa-book"></i>
           </div>
-          <p class="mb-1"><%= truncate(journal.content, length: 150) %></p>
-          <% if journal.feedback.present? %>
-            <small class="text-success">Feedback received</small>
-          <% else %>
-            <small class="text-warning">Waiting for feedback</small>
+          <div class="journals-stat__content">
+            <span class="journals-stat__number"><%= @journals.count %></span>
+            <span class="journals-stat__label">Total Entries</span>
+          </div>
+        </div>
+        <div class="journals-stat journals-stat--feedback">
+          <div class="journals-stat__icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="journals-stat__content">
+            <span class="journals-stat__number"><%= @journals.select { |j| j.feedback.present? }.count %></span>
+            <span class="journals-stat__label">With Feedback</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Journals Grid -->
+      <div class="journals-grid">
+        <% @journals.each do |journal| %>
+          <%= link_to partnership_journal_path(journal.partnership, journal), class: "journal-card" do %>
+            <!-- Topic Image Banner -->
+            <div class="journal-card__banner">
+              <% if journal.challenge.topic.image.attached? %>
+                <%= image_tag url_for(journal.challenge.topic.image), class: "journal-card__image", alt: journal.challenge.topic.name %>
+              <% else %>
+                <div class="journal-card__placeholder">
+                  <i class="fas fa-pen-fancy"></i>
+                </div>
+              <% end %>
+              <div class="journal-card__overlay">
+                <span class="journal-card__topic"><%= journal.challenge.topic.name %></span>
+              </div>
+            </div>
+
+            <!-- Card Content -->
+            <div class="journal-card__body">
+              <p class="journal-card__excerpt"><%= truncate(journal.content, length: 80) %></p>
+
+              <div class="journal-card__footer">
+                <span class="journal-card__time">
+                  <i class="fas fa-clock"></i>
+                  <%= time_ago_in_words(journal.created_at) %> ago
+                </span>
+                <% if journal.feedback.present? %>
+                  <span class="journal-card__badge journal-card__badge--success">
+                    <i class="fas fa-check"></i>
+                  </span>
+                <% else %>
+                  <span class="journal-card__badge journal-card__badge--pending">
+                    <i class="fas fa-hourglass-half"></i>
+                  </span>
+                <% end %>
+              </div>
+            </div>
           <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
     <% else %>
-    <p class="mt-3">You don't have any journal entries yet. Start a <a href="#">challenge</a> to create one!</p>
+      <!-- Empty State -->
+      <div class="journals-empty">
+        <div class="journals-empty__illustration">
+          <div class="journals-empty__icon-wrapper">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <div class="journals-empty__decorations">
+            <span class="decoration decoration--1"><i class="fas fa-pencil-alt"></i></span>
+            <span class="decoration decoration--2"><i class="fas fa-star"></i></span>
+            <span class="decoration decoration--3"><i class="fas fa-lightbulb"></i></span>
+          </div>
+        </div>
+        <h2 class="journals-empty__title">Start Your Writing Journey</h2>
+        <p class="journals-empty__text">Complete a challenge to create your first journal entry and begin improving your language skills.</p>
+        <%= link_to dashboard_path, class: "journals-empty__cta" do %>
+          Go to Dashboard
+          <i class="fas fa-arrow-right"></i>
+        <% end %>
+      </div>
     <% end %>
-  </div>
+  </main>
 </div>
