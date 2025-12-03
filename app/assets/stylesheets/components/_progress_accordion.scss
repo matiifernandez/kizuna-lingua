@@ -1,113 +1,114 @@
 // Progress Accordion
-// Mobile-first: accordion for progress tracking (backward compatibility)
+// Mobile-first: accordion for progress tracking
+// Scoped to #progressAccordion to avoid conflicts with other accordions
 
 #progressAccordion {
   width: 100%;
-}
 
-.accordion {
-  margin: 0;
-  width: 100%;
-  border-radius: 0.75rem;
-  overflow: hidden;
-
-  @media (min-width: 576px) {
-    border-radius: 1rem;
-  }
-}
-
-.accordion-item {
-  background: white;
-  border: none;
-  border-radius: 0;
-  margin-bottom: 0;
-
-  &:first-of-type {
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
+  .accordion {
+    margin: 0;
+    width: 100%;
+    border-radius: 0.75rem;
+    overflow: hidden;
 
     @media (min-width: 576px) {
-      border-top-left-radius: 1rem;
-      border-top-right-radius: 1rem;
+      border-radius: 1rem;
     }
   }
 
-  &:last-of-type {
-    border-bottom-left-radius: 0.75rem;
-    border-bottom-right-radius: 0.75rem;
+  .accordion-item {
+    background: white;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
 
-    @media (min-width: 576px) {
-      border-bottom-left-radius: 1rem;
-      border-bottom-right-radius: 1rem;
+    &:first-of-type {
+      border-top-left-radius: 0.75rem;
+      border-top-right-radius: 0.75rem;
+
+      @media (min-width: 576px) {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+      }
+    }
+
+    &:last-of-type {
+      border-bottom-left-radius: 0.75rem;
+      border-bottom-right-radius: 0.75rem;
+
+      @media (min-width: 576px) {
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+      }
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $slate-200;
     }
   }
 
-  &:not(:last-child) {
-    border-bottom: 1px solid $slate-200;
-  }
-}
-
-.accordion-header {
-  border: none;
-}
-
-.accordion-button {
-  background: white;
-  color: $slate-800;
-  font-weight: 600;
-  font-size: 0.8125rem;
-  padding: 0.875rem 1rem;
-  border: none;
-  box-shadow: none;
-
-  @media (min-width: 576px) {
-    font-size: 0.9375rem;
-    padding: 1rem 1.25rem;
-  }
-
-  &::after {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23475569'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-    width: 1rem;
-    height: 1rem;
-
-    @media (min-width: 576px) {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-  }
-
-  &:hover {
-    background: $slate-100;
-    color: $slate-900;
-  }
-
-  &:focus {
-    box-shadow: none;
+  .accordion-header {
     border: none;
   }
 
-  &:not(.collapsed) {
+  .accordion-button {
     background: white;
-    color: $coral;
+    color: $slate-800;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    padding: 0.875rem 1rem;
+    border: none;
     box-shadow: none;
 
+    @media (min-width: 576px) {
+      font-size: 0.9375rem;
+      padding: 1rem 1.25rem;
+    }
+
     &::after {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FF6B6B'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23475569'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+      width: 1rem;
+      height: 1rem;
+
+      @media (min-width: 576px) {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+
+    &:hover {
+      background: $slate-100;
+      color: $slate-900;
+    }
+
+    &:focus {
+      box-shadow: none;
+      border: none;
+    }
+
+    &:not(.collapsed) {
+      background: white;
+      color: $coral;
+      box-shadow: none;
+
+      &::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FF6B6B'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+      }
     }
   }
-}
 
-.accordion-collapse {
-  border: none;
-}
+  .accordion-collapse {
+    border: none;
+  }
 
-.accordion-body {
-  padding: 0.375rem 1rem 1rem;
-  color: $slate-700;
-  background: white;
+  .accordion-body {
+    padding: 0.375rem 1rem 1rem;
+    color: $slate-700;
+    background: white;
 
-  @media (min-width: 576px) {
-    padding: 0.5rem 1.25rem 1.25rem;
+    @media (min-width: 576px) {
+      padding: 0.5rem 1.25rem 1.25rem;
+    }
   }
 }
 

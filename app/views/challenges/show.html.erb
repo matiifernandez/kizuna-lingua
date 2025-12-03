@@ -1,68 +1,121 @@
-<div class="container" data-controller="timer"
+<div style="height: calc(100vh - 56px); height: calc(100dvh - 56px); display: flex; flex-direction: column; background: #F8FAFC;"
+     data-controller="timer"
      data-timer-user-language-value="<%= current_user.native_language %>"
      data-timer-partner-language-value="<%= current_user.learning_language %>">
-  <h1 class="mt-4 me-4 ms-4"><%= @topic.name %></h1>
-  <p class="mt-3 mb-4 me-4 ms-4">
-    <% if current_user.learning_language == "japanese" %>
-      <%= @challenge.conversation["en"] %>
-    <% elsif current_user.learning_language == "english" %>
-      <%= @challenge.conversation["jp"] %>
-    <% end %>
-  </p>
-  <div class="timer-card">
-    <div data-timer-target="turnIndicator" class="timer-indicator user-turn">
-      Press Start to Begin
+
+  <!-- Header Section -->
+  <header style="background: linear-gradient(135deg, #1E293B 0%, #475569 100%); padding: 1rem; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 0.75rem; max-width: 800px; margin: 0 auto;">
+      <%= link_to topic_path(@topic), style: "display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; background: rgba(255,255,255,0.1); border-radius: 50%; color: white; text-decoration: none; flex-shrink: 0;" do %>
+        <i class="fas fa-arrow-left" style="font-size: 0.875rem;"></i>
+      <% end %>
+      <div style="flex: 1; min-width: 0;">
+        <h1 style="font-size: 1.125rem; font-weight: 700; color: white; margin: 0; line-height: 1.2;"><%= @topic.name %></h1>
+        <p style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin: 0.25rem 0 0 0;">Conversation Practice</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,255,255,0.1); padding: 0.375rem 0.75rem; border-radius: 1rem;">
+        <i class="fas fa-microphone" style="font-size: 0.625rem; color: #20B2AA;"></i>
+        <span style="font-size: 0.6875rem; font-weight: 600; color: white; text-transform: uppercase; letter-spacing: 0.025em;">Live</span>
+      </div>
     </div>
-    <div class="timer-display" data-timer-target="display">
-      00:30
-    </div>
-    <div class="timer-buttons">
-      <button data-timer-target="startButton"
-              data-action="click->timer#toggleTimer"
-        class="timer-start-btn">
-        <i class="fa-solid fa-pause d-none" data-timer-target="pauseIcon"></i>
-        <i class="fa-solid fa-play" data-timer-target="playIcon"></i>
-      </button>
-      <button data-action="click->timer#manualSwitch"
-        class="timer-switch-btn">
-        Switch Language
-      </button>
-    </div>
-  </div>
-  <div class="hint-accordion-container">
-    <div class="accordion" id="hintAccordion">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="hintHeading">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hintCollapse" aria-expanded="false" aria-controls="hintCollapse">
-            Click here for a hint
+  </header>
+
+  <!-- Main Content -->
+  <main style="flex: 1; overflow-y: auto; padding: 1.5rem 1rem;">
+    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+
+      <!-- Conversation Prompt Card -->
+      <div style="background: white; border-radius: 1rem; box-shadow: 0 4px 16px rgba(30,41,59,0.08); overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%); padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-comment-alt" style="font-size: 0.875rem; color: white;"></i>
+          <span style="font-size: 0.8125rem; font-weight: 600; color: white;">Conversation Topic</span>
+        </div>
+        <div style="padding: 1.25rem; font-size: 1rem; line-height: 1.7; color: #334155;">
+          <% if current_user.learning_language == "japanese" %>
+            <%= @challenge.conversation["en"] %>
+          <% elsif current_user.learning_language == "english" %>
+            <%= @challenge.conversation["jp"] %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Timer Card -->
+      <div style="background: linear-gradient(135deg, #1E293B 0%, #475569 100%); border-radius: 1rem; box-shadow: 0 4px 16px rgba(30,41,59,0.15); padding: 2rem; text-align: center;">
+        <!-- Turn Indicator -->
+        <div data-timer-target="turnIndicator" style="font-size: 1.125rem; font-weight: 500; color: rgba(255,255,255,0.9); margin-bottom: 0.75rem;">
+          Press Start to Begin
+        </div>
+
+        <!-- Timer Display -->
+        <div data-timer-target="display" style="font-size: 4.5rem; font-weight: 700; color: white; letter-spacing: 0.1em; margin: 1rem 0; font-variant-numeric: tabular-nums;">
+          00:30
+        </div>
+
+        <!-- Timer Buttons -->
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button data-timer-target="startButton"
+                  data-action="click->timer#toggleTimer"
+                  style="display: flex; align-items: center; justify-content: center; width: 4rem; height: 4rem; background: linear-gradient(135deg, #20B2AA 0%, #3CCDC5 100%); border: none; border-radius: 50%; color: white; cursor: pointer; box-shadow: 0 4px 12px rgba(32,178,170,0.4); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+            <i class="fa-solid fa-pause d-none" data-timer-target="pauseIcon" style="font-size: 1.5rem;"></i>
+            <i class="fa-solid fa-play" data-timer-target="playIcon" style="font-size: 1.5rem; margin-left: 3px;"></i>
           </button>
-        </h2>
+          <button data-action="click->timer#manualSwitch"
+                  style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 1.5rem; background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%); border: none; border-radius: 0.75rem; color: white; font-size: 0.9375rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(255,107,107,0.4); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+            <i class="fas fa-exchange-alt"></i>
+            Switch Language
+          </button>
+        </div>
+      </div>
+
+      <!-- Grammar Hints Accordion -->
+      <div style="background: white; border-radius: 1rem; box-shadow: 0 4px 16px rgba(30,41,59,0.08); overflow: hidden;">
+        <button type="button" data-bs-toggle="collapse" data-bs-target="#hintCollapse" aria-expanded="false" aria-controls="hintCollapse"
+                style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; background: white; border: none; cursor: pointer;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: linear-gradient(135deg, #FFB347 0%, #FFC66D 100%); display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-lightbulb" style="font-size: 1rem; color: white;"></i>
+            </div>
+            <div style="text-align: left;">
+              <div style="font-size: 0.9375rem; font-weight: 600; color: #1E293B;">Need a Hint?</div>
+              <div style="font-size: 0.75rem; color: #64748B;">View grammar points for this conversation</div>
+            </div>
+          </div>
+          <i class="fas fa-chevron-down" style="font-size: 0.75rem; color: #94A3B8; transition: transform 0.2s ease;"></i>
+        </button>
+
         <div id="hintCollapse" class="accordion-collapse collapse" aria-labelledby="hintHeading">
-          <div class="accordion-body">
-            <% @grammar_points.each do |grammar_point| %>
-              <div class="mb-3">
-                <h5><%= grammar_point.title %> <span class="badge bg-secondary"><%= grammar_point.level %></span></h5>
-                <p><strong>Explanation:</strong> <%= grammar_point.explanation %></p>
-                <p><strong>Examples:</strong> <%= grammar_point.examples %></p>
+          <div style="padding: 0 1.25rem 1.25rem; border-top: 1px solid #E2E8F0;">
+            <% @grammar_points.each_with_index do |grammar_point, index| %>
+              <div style="padding: 1rem 0; <%= 'border-bottom: 1px solid #E2E8F0;' unless grammar_point == @grammar_points.last %>">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <h5 style="font-size: 1rem; font-weight: 600; color: #1E293B; margin: 0;"><%= grammar_point.title %></h5>
+                  <span style="font-size: 0.6875rem; font-weight: 600; color: white; background: #64748B; padding: 0.125rem 0.5rem; border-radius: 1rem;"><%= grammar_point.level %></span>
+                </div>
+                <p style="font-size: 0.875rem; color: #475569; margin: 0 0 0.5rem 0; line-height: 1.6;">
+                  <strong style="color: #1E293B;">Explanation:</strong> <%= grammar_point.explanation %>
+                </p>
+                <p style="font-size: 0.875rem; color: #475569; margin: 0; line-height: 1.6;">
+                  <strong style="color: #1E293B;">Examples:</strong> <%= grammar_point.examples %>
+                </p>
               </div>
-              <% unless grammar_point == @grammar_points.last %>
-                <hr>
-              <% end %>
             <% end %>
           </div>
         </div>
       </div>
+
     </div>
-  </div>
-  <div class="text-center mt-4">
-    <%= button_to 'Conversation Completed',
-                  complete_conversation_journal_path(@journal),
-                  method: :patch,
-                  id: 'completion-form-button',
-                  class: 'btn btn-primary' %>
-  </div>
-  <div class="record" data-controller="record" data-record-journal-value="<%= @journal.id %>">
-    <button class="btn btn-primary mt-2" data-record-target="record" data-action="click->record#startRecording">Start</button>
-    <button class="btn btn-primary mt-2" data-action="click->record#stopRecording">stop</button>
-  </div>
+  </main>
+
+  <!-- Footer with Completion Button -->
+  <footer style="flex-shrink: 0; background: white; padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; box-shadow: 0 -4px 16px rgba(30,41,59,0.05);">
+    <div style="max-width: 800px; margin: 0 auto; display: flex; justify-content: center;">
+      <%= button_to complete_conversation_journal_path(@journal),
+                    method: :patch,
+                    id: 'completion-form-button',
+                    style: "display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2rem; background: linear-gradient(135deg, #20B2AA 0%, #3CCDC5 100%); border: none; border-radius: 0.75rem; color: white; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(32,178,170,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; width: 100%; max-width: 400px;" do %>
+        <i class="fas fa-check-circle"></i>
+        <span>Conversation Completed</span>
+      <% end %>
+    </div>
+  </footer>
 </div>
