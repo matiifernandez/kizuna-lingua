@@ -1,11 +1,17 @@
+// Legacy list item styles
+// Updated to match the new theme
+
 .list-item {
-    cursor: pointer;
-    background: linear-gradient(135deg, #722f37, #4a1521);
-    color: #fff;
-    transition: background 0.3s ease;
+  cursor: pointer;
+  background: white;
+  color: $slate-800;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba($slate-900, 0.08);
 }
 
 .list-item:hover {
-    background: linear-gradient(135deg, #8c3943, #541b27);
-    color: #fff;
+  background: $slate-100;
+  color: $slate-800;
+  box-shadow: 0 4px 12px rgba($slate-900, 0.12);
 }

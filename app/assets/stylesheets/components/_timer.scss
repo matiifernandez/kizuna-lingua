@@ -1,53 +1,56 @@
+// Timer card styles
+// Updated to match the new theme
+
 .timer-card {
-  border-radius: 20px;
-  background: linear-gradient(120deg, #372549, #774C60);
-  box-shadow: 0 5px 10px #160f1d, 0 5px 10px #1d1317;
-  color: #fff;
-  padding: 24px;
+  border-radius: 1rem;
+  background: $gradient-hero;
+  box-shadow: 0 4px 12px rgba($slate-900, 0.15);
+  color: white;
+  padding: 1.5rem;
   text-align: center;
-  margin: 20px 20px;
+  margin: 1.25rem;
 }
 
 .timer-display {
   font-size: 4rem;
   font-weight: bold;
   letter-spacing: 2px;
-  margin: 16px 0;
+  margin: 1rem 0;
 }
 
 .timer-indicator {
   font-size: 1.25rem;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
   transition: color 0.3s ease;
 }
 
 .timer-indicator.user-turn {
-  color: #fff;
+  color: white;
 }
 
 .timer-indicator.partner-turn {
-  color: #fff;
+  color: white;
 }
 
 .timer-indicator.complete {
-  color: #fff;
+  color: $teal-light;
 }
 
 .timer-buttons {
   display: flex;
-  gap: 12px;
+  gap: 0.75rem;
   justify-content: center;
 }
 
 .timer-start-btn,
 .timer-switch-btn {
   border: none;
-  border-radius: 12px;
-  color: #fff;
+  border-radius: 0.75rem;
+  color: white;
   font-size: 1rem;
   font-weight: 600;
-  padding: 12px 32px;
+  padding: 0.75rem 2rem;
   min-width: 140px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
@@ -62,20 +65,18 @@
 }
 
 .timer-switch-btn {
-  background: linear-gradient(120deg, #DE5860, #E87A80);
+  background: $gradient-coral;
 
   &:hover:not(:disabled) {
-    box-shadow: 0 4px 12px rgba(#DE5860, 0.4);
-    background: linear-gradient(120deg, darken(#DE5860, 5%), darken(#E87A80, 5%));
+    box-shadow: 0 4px 12px rgba($coral, 0.4);
   }
 }
 
 .timer-start-btn {
-  background: linear-gradient(120deg, #3D88BA, #5AA0CC);
+  background: $gradient-teal;
 
   &:hover:not(:disabled) {
-    box-shadow: 0 4px 12px rgba(#3D88BA, 0.4);
-    background: linear-gradient(120deg, darken(#3D88BA, 5%), darken(#5AA0CC, 5%));
+    box-shadow: 0 4px 12px rgba($teal, 0.4);
   }
 
   i {
@@ -86,7 +87,7 @@
 .hint-accordion-container {
   display: flex;
   justify-content: center;
-  margin: 20px;
+  margin: 1.25rem;
 
   .accordion {
     width: 100%;

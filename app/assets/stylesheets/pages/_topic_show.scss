@@ -153,6 +153,7 @@
 
   .accordion-button {
     padding: 1rem;
+    padding-right: 2.5rem;
     font-size: 0.9375rem;
     font-weight: 600;
     color: $slate-800;
@@ -161,6 +162,8 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
 
     &:not(.collapsed) {
       background: $slate-100;
@@ -173,12 +176,16 @@
     }
 
     &::after {
-      margin-left: auto;
+      position: absolute;
+      right: 1rem;
       flex-shrink: 0;
+      width: 1rem;
+      height: 1rem;
     }
 
     @media (min-width: 576px) {
       padding: 1.125rem 1.25rem;
+      padding-right: 2.75rem;
       font-size: 1rem;
     }
   }

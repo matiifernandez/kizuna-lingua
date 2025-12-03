@@ -1,54 +1,43 @@
-/* Apply the dark gradient background to the new container class */
+// Journal list styles
+// Updated to match the new theme
+
 .journal-list {
-  border-radius: 8px;
-  padding: 10px; /* Add padding inside the list container to frame the items nicely */
+  border-radius: 0.75rem;
+  padding: 0.625rem;
   width: 100%;
-  max-width: 400px; /* Adjust this width as needed */
+  max-width: 400px;
 }
 
-/* Target the list items ONLY inside the .journal-list to give them the card appearance */
 .journal-list .list-group-item {
-  /* Fix 1: Add margin below each item to create space between the "cards" */
-  margin-bottom: 5px;
-
-  /* Fix 2: Ensure the background is white to stand out from the dark gradient */
-  background: linear-gradient(135deg,#372549,#774C60);
-
-  /* Ensure padding inside the item is adequate */
-  padding: 15px;
-
-  /* Reset default list-group-item styling */
-  border: white;
-  border-radius: 4px;
-  box-shadow: 0 5px 10px #160f1d,0 5px 10px #1d1317;
-  transition: transform 0.3s ease
+  margin-bottom: 0.5rem;
+  background: white;
+  padding: 1rem;
+  border: 1px solid $slate-200;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba($slate-900, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .journal-list .list-group-item:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba($slate-900, 0.12);
   z-index: 10;
 }
 
-/* Ensure the last item doesn't have extra margin at the bottom of the container */
 .journal-list .list-group-item:last-child {
   margin-bottom: 0;
 }
 
-/* Fix 3: Adjust spacing between the title/topic and the time. */
-/* We target the flex container that holds the title and time */
 .journal-list .list-group-item .d-flex {
-    /* Add space between the title/topic (h5) and the time (small) */
-    margin-bottom: 5px; /* Adds space between the header line and the content/entry below it */
+  margin-bottom: 0.375rem;
 }
 
-/* Fix 4: Ensure the text inside the white card is readable */
 .journal-list .list-group-item h5,
 .journal-list .list-group-item p,
 .journal-list .list-group-item small {
-    color: white; /* Dark color for text inside the white card */
+  color: $slate-800;
 }
 
-/* Re-apply custom color for the "Waiting for feedback" status */
 .journal-list .list-group-item .text-warning {
-    color: #c85040 !important; /* Example custom reddish color */
+  color: $gold !important;
 }
