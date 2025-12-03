@@ -11,7 +11,7 @@ export default class extends Controller {
     this.handleSelectionChange = this.handleSelectionChange.bind(this)
     this.selectionTimeout = null
     this.currentSelection = null
-    console.log(this.buttonTarget);
+
 
     // selectionchange works both on desktop and mobile (including PWAs)
     document.addEventListener("selectionchange", this.handleSelectionChange)
@@ -24,10 +24,10 @@ export default class extends Controller {
   // Fired whenever browser selection changes (mouse, touch, keyboard, etc.)
   handleSelectionChange() {
     clearTimeout(this.selectionTimeout)
-    console.log("1");
+
 
     this.selectionTimeout = setTimeout(() => {
-      console.log("2")
+
       const selection = window.getSelection()
       if (!selection || selection.isCollapsed) {
         this.hideButton()
@@ -53,7 +53,7 @@ export default class extends Controller {
 
       // Save selection info so we can use it when the user taps the button
       this.currentSelection = { range, selectedText }
-      console.log("3");
+
 
       this.positionButton(range)
       this.showButton()
@@ -79,10 +79,10 @@ export default class extends Controller {
   }
 
   showButton() {
-    console.log("4");
+
 
     this.buttonTarget.classList.remove("hidden")
-    console.log(this.buttonTarget.classList);
+
 
   }
 

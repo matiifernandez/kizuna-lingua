@@ -4,7 +4,6 @@ export default class extends Controller {
   static targets = ["comments"]
 
   connect() {
-    console.log("linker hello");
 
     this.element.addEventListener("click", this.onClick.bind(this))
   }
