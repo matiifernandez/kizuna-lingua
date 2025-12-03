@@ -10,3 +10,5 @@ pin "@popperjs/core", to: "popper.js", preload: true
 pin "@rails/actioncable", to: "actioncable.esm.js"
 pin_all_from "app/javascript/channels", under: "channels"
 pin "sweetalert2" # @11.26.3
+pin "channels/consumer", to: "channels/consumer.js"
+pin "channels/notification_channel", to: "channels/notification_channel.js"
