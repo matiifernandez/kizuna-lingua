@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   end
   resources :journals, only: [:update] do
     member do
+      patch :add_audio
       patch :complete_conversation
       post :remind_partner # New route for sending reminders
     end

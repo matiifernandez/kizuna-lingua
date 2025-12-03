@@ -44,6 +44,19 @@ class JournalsController < ApplicationController
     end
   end
 
+  def add_audio
+    @journal = Journal.find(params[:id])
+    authorize @journal
+    if params[:audio].present?
+      audio = params[:audio]
+      @journal.audio.attach(
+        io: audio,
+        filename: "audio#{@journal.id}.webm",
+        content_type: "audio/webm"
+      )
+    end
+  end
+
   def complete_conversation
     @journal = Journal.find(params[:id])
     authorize @journal

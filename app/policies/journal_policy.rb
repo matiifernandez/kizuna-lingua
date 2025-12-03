@@ -23,6 +23,10 @@ class JournalPolicy < ApplicationPolicy
     user.partnership && record.partnership == user.partnership && record.user != user
   end
 
+  def add_audio?
+    true
+  end
+
   def complete_conversation?
     user.partnership && record.partnership == user.partnership
   end
