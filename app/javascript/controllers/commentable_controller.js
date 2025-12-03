@@ -1,0 +1,164 @@
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static values = {
+    journalId: Number
+  }
+
+  static targets = ["button", "transcript"]
+
+  connect() {
+    this.handleSelectionChange = this.handleSelectionChange.bind(this)
+    this.selectionTimeout = null
+    this.currentSelection = null
+    console.log(this.buttonTarget);
+
+    // selectionchange works both on desktop and mobile (including PWAs)
+    document.addEventListener("selectionchange", this.handleSelectionChange)
+  }
+
+  disconnect() {
+    document.removeEventListener("selectionchange", this.handleSelectionChange)
+  }
+
+  // Fired whenever browser selection changes (mouse, touch, keyboard, etc.)
+  handleSelectionChange() {
+    clearTimeout(this.selectionTimeout)
+    console.log("1");
+
+    this.selectionTimeout = setTimeout(() => {
+      console.log("2")
+      const selection = window.getSelection()
+      if (!selection || selection.isCollapsed) {
+        this.hideButton()
+        this.currentSelection = null
+        return
+      }
+
+      const range = selection.getRangeAt(0)
+
+      // Only react if selection is inside our transcript container
+      if (!this.element.contains(range.commonAncestorContainer)) {
+        this.hideButton()
+        this.currentSelection = null
+        return
+      }
+
+      const selectedText = selection.toString().trim()
+      if (!selectedText) {
+        this.hideButton()
+        this.currentSelection = null
+        return
+      }
+
+      // Save selection info so we can use it when the user taps the button
+      this.currentSelection = { range, selectedText }
+      console.log("3");
+
+      this.positionButton(range)
+      this.showButton()
+    }, 250) // small debounce so mobile selection handles settle
+  }
+
+  positionButton(range) {
+    const rect = range.getBoundingClientRect()
+    const button = this.buttonTarget
+
+    // Fallback if browser gives empty rect
+    if (!rect || (rect.top === 0 && rect.left === 0 && rect.width === 0 && rect.height === 0)) {
+      this.hideButton()
+      return
+    }
+
+    const scrollY = window.scrollY || document.documentElement.scrollTop
+    const scrollX = window.scrollX || document.documentElement.scrollLeft
+
+    // Position slightly above the selection
+    button.style.top = `${rect.top + scrollY - button.offsetHeight - 8}px`
+    button.style.left = `${rect.left + scrollX}px`
+  }
+
+  showButton() {
+    console.log("4");
+
+    this.buttonTarget.classList.remove("hidden")
+    console.log(this.buttonTarget.classList);
+
+  }
+
+  hideButton() {
+    this.buttonTarget.classList.add("hidden")
+  }
+
+  // Called when user taps/clicks the floating "+ Comment" button
+  addComment() {
+    if (!this.currentSelection) return
+
+    const { range, selectedText } = this.currentSelection
+    console.log(this.currentSelection);
+
+    const { start, end } = this.getOffsets(range)
+    if (start === end) return
+
+    const body = window.prompt(`Comment for: "${selectedText}"`)
+    if (!body) return
+
+    this.createComment({
+      start_index: start,
+      end_index: end,
+      selected_text: selectedText,
+      body: body
+    })
+
+    // Clear selection & button
+    const selection = window.getSelection()
+    if (selection) selection.removeAllRanges()
+    this.currentSelection = null
+    this.hideButton()
+  }
+
+  // Translate DOM range to character offsets in the transcript text
+  getOffsets(range) {
+    const preRange = range.cloneRange()
+    preRange.selectNodeContents(this.transcriptTarget)
+    preRange.setEnd(range.startContainer, range.startOffset)
+    const start = preRange.toString().length
+
+    const fullRange = range.cloneRange()
+    fullRange.selectNodeContents(this.transcriptTarget)
+    fullRange.setEnd(range.endContainer, range.endOffset)
+    const end = fullRange.toString().length
+    console.log(start, end);
+
+    return { start, end }
+  }
+
+  createComment(data) {
+    const token = document.querySelector('meta[name="csrf-token"]').content
+
+    fetch(`/journals/${this.journalIdValue}/comments`, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": token,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        comment: {
+          journal_id: this.journalIdValue,
+          start_index: data.start_index,
+          end_index: data.end_index,
+
+          body: data.body
+        }
+      })
+    }).then(response => {
+      if (response.ok) {
+        // MVP: just reload. Later you can Turbo-Stream this.
+        window.location.reload()
+      } else {
+        console.error("Failed to create comment")
+      }
+    })
+  }
+}

@@ -24,7 +24,8 @@ Rails.application.routes.draw do
       post :generate
     end
   end
-  resources :journals, only: [:update] do
+  resources :journals, only: [:update, :edit] do
+    resources :comments, only: [:create]
     member do
       patch :add_audio
       patch :complete_conversation

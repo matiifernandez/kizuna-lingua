@@ -27,6 +27,10 @@ class JournalPolicy < ApplicationPolicy
     true
   end
 
+  def edit?
+    user.partnership == record.partnership
+  end
+
   def complete_conversation?
     user.partnership && record.partnership == user.partnership
   end

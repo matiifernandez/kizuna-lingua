@@ -9,6 +9,11 @@ class JournalsController < ApplicationController
     authorize @journal
   end
 
+  def edit
+    @journal = Journal.find(params[:id])
+    authorize @journal
+  end
+
   def new
     @challenge = Challenge.find(params[:challenge_id])
     @journal = Journal.new
@@ -47,6 +52,10 @@ class JournalsController < ApplicationController
   def add_audio
     @journal = Journal.find(params[:id])
     authorize @journal
+    @challenge = @journal.challenge
+    @partnership = @journal.partnership
+    all_journals = Journal.where(challenge: @challenge, partnership: @partnership)
+    partner_journal = all_journals.find_by("id != ?", @journal.id)
     if params[:audio].present?
       audio = params[:audio]
       @journal.audio.attach(
@@ -54,6 +63,7 @@ class JournalsController < ApplicationController
         filename: "audio#{@journal.id}.webm",
         content_type: "audio/webm"
       )
+      TranscribeAudioJob.perform_later(@journal.audio.blob.id, "Journal", @journal.id)
     end
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_01_065908) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_03_062517) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_01_065908) do
     t.index ["topic_id"], name: "index_challenges_on_topic_id"
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.integer "start_index", null: false
+    t.integer "end_index", null: false
+    t.bigint "user_id", null: false
+    t.bigint "journal_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["journal_id"], name: "index_comments_on_journal_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "grammar_points", force: :cascade do |t|
     t.string "title"
     t.string "level"
@@ -80,6 +92,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_01_065908) do
     t.bigint "partnership_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "transcript"
     t.index ["challenge_id"], name: "index_journals_on_challenge_id"
     t.index ["partnership_id"], name: "index_journals_on_partnership_id"
     t.index ["user_id"], name: "index_journals_on_user_id"
@@ -293,6 +306,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_01_065908) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "challenges", "topics"
+  add_foreign_key "comments", "journals"
+  add_foreign_key "comments", "users"
   add_foreign_key "invite_codes", "users"
   add_foreign_key "journals", "challenges"
   add_foreign_key "journals", "partnerships"

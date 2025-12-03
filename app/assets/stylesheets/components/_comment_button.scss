@@ -1,0 +1,58 @@
+.comment-floating-btn {
+  position: absolute;
+  z-index: 1000;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  background: #ffcc66;
+}
+
+.comment-floating-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.journal-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.journal-transcript {
+  white-space: pre-wrap;  /* preserve newlines */
+  line-height: 1.6;
+}
+
+.journal-highlight {
+  background-color: rgba(255, 229, 100, 0.7);
+  border-radius: 2px;
+  padding: 0 2px;
+  cursor: pointer;
+}
+
+.journal-comments {
+  max-height: 70vh;
+  overflow-y: auto;
+  border-left: 1px solid #eee;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+}
+
+.journal-comment-card {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.journal-comment-card--active {
+  background: #fff7d6;
+  box-shadow: 0 0 0 1px #f2c94c;
+}
+
+.journal-comment-selected {
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 0.25rem;
+}

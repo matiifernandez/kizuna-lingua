@@ -1,0 +1,24 @@
+<div class="container mt-5" data-controller="comment-linker">
+  <div class="journal-show" data-controller="commentable" data-commentable-journal-id-value="<%= @journal.id %>">
+    <div class="journal-main">
+      <div id="transcript" data-commentable-target="transcript"><%=render_transcript_with_comments(@journal) %></div>
+    </div>
+    <button
+    type="button"
+    class="comment-floating-btn hidden"
+    data-commentable-target="button"
+    data-action="click->commentable#addComment">
+      + Comment
+    </button>
+  </div>
+  <aside class="journal-comments"
+         data-comment-linker-target="comments">
+    <% @journal.comments.order(:created_at).each do |comment| %>
+      <div class="journal-comment-card"
+           data-comment-id="<%= comment.id %>">
+        <strong><%= comment.user.name || comment.user.email %></strong>
+        <p><%= comment.content %></p>
+      </div>
+    <% end %>
+  </aside>
+</div>
