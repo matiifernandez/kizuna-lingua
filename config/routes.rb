@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :notifications, only: [:show]
+  resources :notifications, only: [:index, :show]
   devise_for :users, controllers: {
     registrations: 'users/registrations'
   }
