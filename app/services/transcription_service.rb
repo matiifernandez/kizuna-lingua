@@ -28,7 +28,11 @@ class TranscriptionService
         prompt: prompt
       )
 
-      { success: true, transcript: transcript.text }
+      # Clean markdown code fences and parse as JSON array
+      clean_text = transcript.text.gsub(/```json\n?|```\n?/, '').strip
+      parsed = JSON.parse(clean_text)
+
+      { success: true, transcript: parsed }
     rescue ArgumentError => e
       { success: false, error: e.message }
     rescue => e

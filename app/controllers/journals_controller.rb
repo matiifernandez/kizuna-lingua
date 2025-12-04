@@ -12,15 +12,15 @@ class JournalsController < ApplicationController
     @transcription_journal = Journal.where(
       partnership_id: @partnership_id,
       challenge_id: @challenge_id
-    ).where.not(
-      transcript: [nil, '']
-    ).first
+    ).where.not(transcript: nil)
+     .where.not("transcript = '[]'::jsonb")
+     .first
   end
 
   def edit
     @journal = Journal.find(params[:id])
     authorize @journal
-    @transcript = JSON.parse(@journal.transcript.gsub(/```json\n|```/, ''))
+    @transcript = parse_transcript(@journal.transcript)
   end
 
   def new
@@ -108,5 +108,20 @@ class JournalsController < ApplicationController
   end
   def journal_params
     params.require(:journal).permit(:content, :feedback, :conversation_status)
+  end
+
+  def parse_transcript(transcript)
+    return [] if transcript.blank?
+
+    # If it's already an array (clean jsonb), return it
+    return transcript if transcript.is_a?(Array)
+
+    # If it's a string (legacy markdown-wrapped), clean and parse it
+    if transcript.is_a?(String)
+      clean_text = transcript.gsub(/```json\n?|```\n?/, '').strip
+      JSON.parse(clean_text)
+    else
+      []
+    end
   end
 end
