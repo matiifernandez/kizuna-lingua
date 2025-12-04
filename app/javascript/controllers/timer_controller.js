@@ -10,7 +10,6 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log(this.startButtonTarget)
     this.remainingTime = this.durationValue
     this.isPartnerTurn = false
     this.isTimerRunning = false
@@ -23,7 +22,6 @@ export default class extends Controller {
   }
 
   toggleTimer() {
-    console.log("timer start")
     if (this.isTimerRunning) {
       this.pauseTimer()
     } else {
@@ -32,11 +30,9 @@ export default class extends Controller {
   }
 
   startTimer() {
-    console.log("timer starting")
     this.isTimerRunning = true
     this.startButtonTarget.classList.add('disabled')
     this.startButtonTarget.disabled = true;
-    // this.pauseIconTarget.classList.remove('d-none')
     this.setTurnIndicator(this.isPartnerTurn)
     this.showRecordingIndicator()
 
@@ -50,15 +46,6 @@ export default class extends Controller {
       }
     }, 1000)
   }
-
-  // pauseTimer() {
-  //   if (this.timerInterval) {
-  //     clearInterval(this.timerInterval)
-  //   }
-  //   this.isTimerRunning = false
-  //   this.pauseIconTarget.classList.add('d-none')
-  //   this.playIconTarget.classList.remove('d-none')
-  // }
 
   stopTimer() {
     if (this.timerInterval) {

@@ -1,7 +1,7 @@
 <div style="height: calc(100vh - 56px); height: calc(100dvh - 56px); display: flex; flex-direction: column; background: #F8FAFC;"
      data-controller="timer"
-     data-timer-user-language-value="<%= current_user.native_language %>"
-     data-timer-partner-language-value="<%= current_user.learning_language %>">
+     data-timer-user-language-value="<%= current_user.native_language.capitalize %>"
+     data-timer-partner-language-value="<%= current_user.learning_language.capitalize %>">
   <!-- Header Section -->
   <header style="background: linear-gradient(135deg, #1E293B 0%, #475569 100%); padding: 1rem; flex-shrink: 0;">
     <div style="display: flex; align-items: center; gap: 0.75rem; max-width: 800px; margin: 0 auto;">
@@ -39,7 +39,7 @@
       <div style="background: linear-gradient(135deg, #1E293B 0%, #475569 100%); border-radius: 1rem; box-shadow: 0 4px 16px rgba(30,41,59,0.15); overflow: hidden;">
         <!-- Turn Indicator Banner -->
         <div data-timer-target="turnIndicator" style="padding: 1rem 1.5rem; background: rgba(255,255,255,0.1); font-size: 1.25rem; font-weight: 600; color: white; text-align: center;">
-          Start Conversation (japanese)
+          Start Conversation in <%= current_user.learning_language.capitalize %>
         </div>
         <!-- Hidden Timer Display (keeps functionality) -->
         <div data-timer-target="display" style="display: none;"></div>

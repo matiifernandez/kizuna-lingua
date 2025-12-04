@@ -11,43 +11,23 @@ export default class extends Controller {
   }
 
   startRecording(e) {
-    console.log("recording");
-
-    // if (!this.mediaDevicesAvailable) return
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then((stream) => {
         this.mediaRecorder = new MediaRecorder(stream);
         this.isRecording = true
         this.mediaRecorder.start();
-        console.log(this.mediaRecorder);
-
-
-
-        console.log(stream);
 
         let chunks = [];
         this.mediaRecorder.ondataavailable = (e) => {
-          console.log(e.data);
           chunks.push(e.data);
-
-
         };
 
         this.mediaRecorder.onstop = (e) => {
-            console.log("recorder stopped");
             const mimeType = this.mediaRecorder.mimeType;
-
             const blob = new Blob(chunks, { type: mimeType });
-
-            // console.log(blob);
-
             chunks = [];
             const formData = new FormData();
             formData.append('audio', blob, 'recording.webm');
-            const formObject = Object.fromEntries(formData.entries());
-            console.log(formObject);
-
-            console.log(blob);
             const response = fetch(`/journals/${this.journalValue}/add_audio`, {
                 method: 'PATCH',
                 body: formData,
@@ -56,15 +36,12 @@ export default class extends Controller {
                   'Accept': 'audio/*'
                 }
               });
-              console.log("hi")
         }
       })
 
   }
 
   stopRecording() {
-    console.log("stopping");
-
     if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
       this.isRecording = false
       this.mediaRecorder.stop();
@@ -73,8 +50,6 @@ export default class extends Controller {
   }
 
   disconnect() {
-    console.log("stopping");
-
     if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
       this.isRecording = false
       this.mediaRecorder.stop();
