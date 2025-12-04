@@ -1,28 +1,93 @@
-<div class="container">
-  <h2>Sign up</h2>
-  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-    <%= f.error_notification %>
-    <div class="form-inputs">
-      <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" }%>
-      <%= f.input :password,
-                required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                input_html: { autocomplete: "new-password" } %>
-      <%= f.input :password_confirmation,
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
-      <%= f.input :name, required: true, input_html: { autocomplete: "name"} %>
-      <%= f.input :native_language, collection: [['English', 'english'], ['Japanese', 'japanese']], required: true, prompt: 'Select your native language' %>
-      <%= f.input :learning_language, collection: [['English', 'english'], ['Japanese', 'japanese']], required: true, prompt: 'Select the language you would like to learn' %>
-      <%= f.input :learning_level, collection: [['Beginner', 'beginner'], ['Intermediate', 'intermediate'], ['Advanced', 'advanced']], required: true, prompt: 'Select your current level in the language you would like to learn' %>
-      <%= f.input :photo, as: :file %>
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card__header">
+      <div class="auth-card__icon">
+        <i class="fas fa-user-plus"></i>
+      </div>
+      <h1 class="auth-card__title">Create Account</h1>
+      <p class="auth-card__subtitle">Join KizunaLingua and start your language journey</p>
     </div>
-    <div class="form-actions">
-      <%= f.button :submit, "Sign up" %>
+
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "auth-form" }) do |f| %>
+      <%= f.error_notification message: "Please fix the errors below:", class: "auth-form__error-notification" %>
+
+      <div class="auth-form__section">
+        <h3 class="auth-form__section-title">
+          <i class="fas fa-user"></i>
+          Account Details
+        </h3>
+        <%= f.input :name,
+                    required: true,
+                    input_html: { autocomplete: "name", class: "auth-form__input" },
+                    label_html: { class: "auth-form__label" },
+                    wrapper_html: { class: "auth-form__group" } %>
+        <%= f.input :email,
+                    required: true,
+                    autofocus: true,
+                    input_html: { autocomplete: "email", class: "auth-form__input" },
+                    label_html: { class: "auth-form__label" },
+                    wrapper_html: { class: "auth-form__group" } %>
+        <%= f.input :password,
+                    required: true,
+                    hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
+                    input_html: { autocomplete: "new-password", class: "auth-form__input" },
+                    label_html: { class: "auth-form__label" },
+                    hint_html: { class: "auth-form__hint" },
+                    wrapper_html: { class: "auth-form__group" } %>
+        <%= f.input :password_confirmation,
+                    required: true,
+                    input_html: { autocomplete: "new-password", class: "auth-form__input" },
+                    label_html: { class: "auth-form__label" },
+                    wrapper_html: { class: "auth-form__group" } %>
+      </div>
+
+      <div class="auth-form__section">
+        <h3 class="auth-form__section-title">
+          <i class="fas fa-language"></i>
+          Language Preferences
+        </h3>
+        <%= f.input :native_language,
+                    collection: [['English', 'english'], ['Japanese', 'japanese']],
+                    required: true,
+                    prompt: 'Select your native language',
+                    input_html: { class: "auth-form__select" },
+                    label_html: { class: "auth-form__label" },
+                    wrapper_html: { class: "auth-form__group" } %>
+        <%= f.input :learning_language,
+                    collection: [['English', 'english'], ['Japanese', 'japanese']],
+                    required: true,
+                    prompt: 'Select the language you want to learn',
+                    input_html: { class: "auth-form__select" },
+                    label_html: { class: "auth-form__label" },
+                    wrapper_html: { class: "auth-form__group" } %>
+        <%= f.input :learning_level,
+                    collection: [['Beginner', 'beginner'], ['Intermediate', 'intermediate'], ['Advanced', 'advanced']],
+                    required: true,
+                    prompt: 'Select your current level',
+                    input_html: { class: "auth-form__select" },
+                    label_html: { class: "auth-form__label" },
+                    wrapper_html: { class: "auth-form__group" } %>
+      </div>
+
+      <div class="auth-form__section">
+        <h3 class="auth-form__section-title">
+          <i class="fas fa-camera"></i>
+          Profile Photo <span class="auth-form__optional">(optional)</span>
+        </h3>
+        <%= f.input :photo,
+                    as: :file,
+                    label: false,
+                    input_html: { class: "auth-form__file" },
+                    wrapper_html: { class: "auth-form__group" } %>
+      </div>
+
+      <div class="auth-form__actions">
+        <%= f.button :submit, "Create Account", class: "auth-form__submit" %>
+      </div>
+    <% end %>
+
+    <div class="auth-card__footer">
+      <%= render "devise/shared/links" %>
     </div>
-  <% end %>
-  <%= render "devise/shared/links" %>
+  </div>
 </div>
