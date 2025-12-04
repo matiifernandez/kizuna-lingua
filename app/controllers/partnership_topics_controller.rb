@@ -7,7 +7,7 @@ class PartnershipTopicsController < ApplicationController
     @partnership_topic.status = "in progress"
     authorize @partnership_topic
     if @partnership_topic.save
-      redirect_to dashboard_path, notice: "Topic '#{@topic.name}' has been selected."
+      redirect_to dashboard_path
     else
       @topics = Topic.all
       render :index, status: :unprocessable_entity

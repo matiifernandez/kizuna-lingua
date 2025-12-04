@@ -79,7 +79,7 @@
       </div>
       <div class="modal-body">
         <%= simple_form_for :topic, url: generate_topics_path, method: :post, 'data-turbo': false do |f| %>
-          <%= f.input :name, label: "Topic for your AI-powered challenges:", placeholder: "e.g., 'Planning a Trip', 'Favorite Books'", required: true, input_html: { class: "topics-modal__input", autocomplete: "off" } %>
+          <%= f.input :name, label: "Title for your new topic", placeholder: "e.g., 'Planning a Trip', 'Favorite Books'", required: true, input_html: { class: "topics-modal__input", autocomplete: "off" } %>
           <div class="topics-modal__actions">
             <button type="submit" class="topics-modal__btn topics-modal__btn--primary" data-disable-with="Generating...">
               <i class="fas fa-magic"></i>
