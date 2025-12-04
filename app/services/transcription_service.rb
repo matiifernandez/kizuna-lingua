@@ -9,30 +9,41 @@ class TranscriptionService
 
   def call
     audio_path = resolve_audio_path
-    prompt = <<~PROMPT
-        Return a **JSON array** of sentences only.
-
-        REQUIREMENTS:
-        - Output must be valid JSON.
-        - No explanation, no surrounding text.
-        - Japanese must be in Japanese characters.
-        - English must be in the Latin alphabet.
-
-        Respond ONLY with the JSON array.
-      PROMPT
 
     begin
+      # Step 1: Transcribe audio with Gemini (handles multilingual)
       transcript = RubyLLM.transcribe(
         audio_path,
-        model: "gemini-2.5-flash",
-        prompt: prompt
+        model: "gemini-2.0-flash",
+        prompt: "Transcribe this audio exactly word-for-word. Do not paraphrase or summarize. Include all languages spoken (English, Japanese, etc)."
       )
 
-      # Clean markdown code fences and parse as JSON array
-      clean_text = transcript.text.gsub(/```json\n?|```\n?/, '').strip
+      Rails.logger.info "Gemini raw output: #{transcript.text}"
+
+      raw_text = transcript.text.strip
+      return { success: true, transcript: [] } if raw_text.empty?
+
+      # Step 2: Use LLM to split into sentences (preserving exact text)
+      format_prompt = <<~PROMPT
+        Split the following transcription into individual sentences.
+        Return ONLY a valid JSON array of strings, nothing else.
+
+        IMPORTANT: Do NOT modify the text in any way.
+        Keep all words, spacing, and punctuation exactly as given.
+        Preserve Japanese in Japanese characters and English in Latin alphabet.
+
+        Transcription:
+        #{raw_text}
+      PROMPT
+
+      response = RubyLLM.chat(model: "gemini-2.5-flash").ask(format_prompt)
+      clean_text = response.content.gsub(/```json\n?|```\n?/, '').strip
       parsed = JSON.parse(clean_text)
 
       { success: true, transcript: parsed }
+    rescue JSON::ParserError => e
+      # If LLM response isn't valid JSON, fall back to single-element array
+      { success: true, transcript: [raw_text] }
     rescue ArgumentError => e
       { success: false, error: e.message }
     rescue => e
