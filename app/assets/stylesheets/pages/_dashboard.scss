@@ -208,7 +208,8 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: $coral-light;
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+  color: #ffb1b1;
 
   @media (min-width: 576px) {
     font-size: 0.75rem;
