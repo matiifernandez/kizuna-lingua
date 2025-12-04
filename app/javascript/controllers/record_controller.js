@@ -37,13 +37,9 @@ export default class extends Controller {
             console.log("recorder stopped");
             const mimeType = this.mediaRecorder.mimeType;
 
-            // Change button to show processing
-            this.recordTarget.style.background = "orange";
-            this.recordTarget.textContent = "Processing...";
-
             const blob = new Blob(chunks, { type: mimeType });
 
-            console.log(blob);
+            // console.log(blob);
 
             chunks = [];
             const formData = new FormData();
@@ -51,7 +47,7 @@ export default class extends Controller {
             const formObject = Object.fromEntries(formData.entries());
             console.log(formObject);
 
-            // console.log(blob);
+            console.log(blob);
             const response = fetch(`/journals/${this.journalValue}/add_audio`, {
                 method: 'PATCH',
                 body: formData,
@@ -60,12 +56,23 @@ export default class extends Controller {
                   'Accept': 'audio/*'
                 }
               });
+              console.log("hi")
         }
       })
 
   }
 
   stopRecording() {
+    console.log("stopping");
+
+    if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
+      this.isRecording = false
+      this.mediaRecorder.stop();
+      this.mediaRecorder.stream.getTracks().forEach(track => track.stop());
+    }
+  }
+
+  disconnect() {
     console.log("stopping");
 
     if (this.mediaRecorder && this.mediaRecorder.state === "recording") {

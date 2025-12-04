@@ -12,10 +12,6 @@
         <h1 style="font-size: 1.125rem; font-weight: 700; color: white; margin: 0; line-height: 1.2;"><%= @topic.name %></h1>
         <p style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin: 0.25rem 0 0 0;">Conversation Practice</p>
       </div>
-      <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,255,255,0.1); padding: 0.375rem 0.75rem; border-radius: 1rem;">
-        <i class="fas fa-microphone" style="font-size: 0.625rem; color: #20B2AA;"></i>
-        <span style="font-size: 0.6875rem; font-weight: 600; color: white; text-transform: uppercase; letter-spacing: 0.025em;">Live</span>
-      </div>
     </div>
   </header>
   <!-- Main Content -->
@@ -34,30 +30,44 @@
             <%= @challenge.conversation["jp"] %>
           <% end %>
         </div>
+        <div style="padding: 0.875rem 1.25rem; background: #F1F5F9; border-top: 1px solid #E2E8F0; display: flex; align-items: center; gap: 0.625rem;">
+          <i class="fas fa-info-circle" style="font-size: 0.875rem; color: #64748B; flex-shrink: 0;"></i>
+          <p style="margin: 0; font-size: 0.8125rem; color: #64748B; line-height: 1.5;">Press the start button to start the challenge and start recording your conversation. This way your conversation can be reviewed at a later time. The speaking language will change every 2 minutes. Check below the recorder for a hint!</p>
+        </div>
       </div>
       <!-- Timer Card -->
-      <div style="background: linear-gradient(135deg, #1E293B 0%, #475569 100%); border-radius: 1rem; box-shadow: 0 4px 16px rgba(30,41,59,0.15); padding: 2rem; text-align: center;">
-        <!-- Turn Indicator -->
-        <div data-timer-target="turnIndicator" style="font-size: 1.125rem; font-weight: 500; color: rgba(255,255,255,0.9); margin-bottom: 0.75rem;">
-          Press Start to Begin
+      <div style="background: linear-gradient(135deg, #1E293B 0%, #475569 100%); border-radius: 1rem; box-shadow: 0 4px 16px rgba(30,41,59,0.15); overflow: hidden;">
+        <!-- Turn Indicator Banner -->
+        <div data-timer-target="turnIndicator" style="padding: 1rem 1.5rem; background: rgba(255,255,255,0.1); font-size: 1.25rem; font-weight: 600; color: white; text-align: center;">
+          Start Conversation (japanese)
         </div>
-        <!-- Timer Display -->
-        <div data-timer-target="display" style="font-size: 4.5rem; font-weight: 700; color: white; letter-spacing: 0.1em; margin: 1rem 0; font-variant-numeric: tabular-nums;">
-          00:30
-        </div>
-        <!-- Timer Buttons -->
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <button data-timer-target="startButton"
-                  data-action="click->timer#toggleTimer"
-            style="display: flex; align-items: center; justify-content: center; width: 4rem; height: 4rem; background: linear-gradient(135deg, #20B2AA 0%, #3CCDC5 100%); border: none; border-radius: 50%; color: white; cursor: pointer; box-shadow: 0 4px 12px rgba(32,178,170,0.4); transition: transform 0.2s ease, box-shadow 0.2s ease;">
-            <i class="fa-solid fa-pause d-none" data-timer-target="pauseIcon" style="font-size: 1.5rem;"></i>
-            <i class="fa-solid fa-play" data-timer-target="playIcon" style="font-size: 1.5rem; margin-left: 3px;"></i>
-          </button>
-          <button data-action="click->timer#manualSwitch"
-            style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 1.5rem; background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%); border: none; border-radius: 0.75rem; color: white; font-size: 0.9375rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(255,107,107,0.4); transition: transform 0.2s ease, box-shadow 0.2s ease;">
-            <i class="fas fa-exchange-alt"></i>
-            Switch Language
-          </button>
+        <!-- Hidden Timer Display (keeps functionality) -->
+        <div data-timer-target="display" style="display: none;"></div>
+        <!-- Controls Section -->
+        <div style="padding: 1.5rem;" data-controller="record" data-record-journal-value="<%= @journal.id %>">
+          <!-- Recording Controls -->
+          <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+            <button data-record-target="record" data-action="click->record#startRecording click->timer#startTimer" data-timer-target="startButton" class="recording-btn">
+              <i class="fa-solid fa-pause d-none" data-timer-target="pauseIcon" style="font-size: 1.5rem;"></i>
+              <i class="fa-solid fa-play" data-timer-target="playIcon" style="font-size: 1.5rem; margin-left: 3px;"></i>
+            </button>
+            <button data-action="click->record#stopRecording click->timer#stopTimer"
+              style="display: flex; align-items: center; justify-content: center; width: 4rem; height: 4rem; background: linear-gradient(135deg, #EF4444 0%, #F87171 100%); border: none; border-radius: 50%; color: white; cursor: pointer; box-shadow: 0 4px 12px rgba(239,68,68,0.4); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+              <i class="fa-solid fa-stop" style="font-size: 1.5rem;"></i>
+            </button>
+            <!-- Recording Indicator (styled as a button) -->
+            <div data-timer-target="recordingIndicator" style="display: none; align-items: center; justify-content: center; width: 4rem; height: 4rem; background: rgba(255,255,255,0.15); border: 2px solid rgba(239,68,68,0.6); border-radius: 50%; box-shadow: 0 4px 12px rgba(239,68,68,0.3);">
+              <span class="recording-dot" style="width: 1rem; height: 1rem;"></span>
+            </div>
+          </div>
+          <!-- Switch Language Button -->
+          <div style="display: flex; justify-content: center;">
+            <button data-action="click->timer#manualSwitch"
+              style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 2rem; color: white; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background 0.2s ease;">
+              <i class="fas fa-exchange-alt" style="font-size: 0.75rem;"></i>
+              Switch Language
+            </button>
+          </div>
         </div>
       </div>
       <!-- Grammar Hints Accordion -->
@@ -81,7 +91,6 @@
               <div style="padding: 1rem 0; <%= 'border-bottom: 1px solid #E2E8F0;' unless grammar_point == @grammar_points.last %>">
                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
                   <h5 style="font-size: 1rem; font-weight: 600; color: #1E293B; margin: 0;"><%= grammar_point.title %></h5>
-                  <span style="font-size: 0.6875rem; font-weight: 600; color: white; background: #64748B; padding: 0.125rem 0.5rem; border-radius: 1rem;"><%= grammar_point.level %></span>
                 </div>
                 <p style="font-size: 0.875rem; color: #475569; margin: 0 0 0.5rem 0; line-height: 1.6;">
                   <strong style="color: #1E293B;">Explanation:</strong> <%= grammar_point.explanation %>
@@ -94,10 +103,7 @@
           </div>
         </div>
       </div>
-      <div class="record" data-controller="record" data-record-journal-value="<%= @journal.id %>">
-        <button class="btn btn-primary mt-2" data-record-target="record" data-action="click->record#startRecording">Start</button>
-        <button class="btn btn-primary mt-2" data-action="click->record#stopRecording">stop</button>
-      </div>
+
     </div>
   </main>
   <!-- Footer with Completion Button -->
