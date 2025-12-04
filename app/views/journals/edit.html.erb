@@ -1,8 +1,8 @@
 <div class="container mt-5" data-controller="comment-linker">
   <div class="journal-show" data-controller="commentable" data-commentable-journal-id-value="<%= @journal.id %>">
     <div class="journal-main">
-      <% @transcript.each do |t| %>
-        <div id="transcript" data-commentable-target="transcript"><%=render_transcript_with_comments(t, @journal) %></div>
+      <% @transcript.each_with_index do |t, index| %>
+        <div id="transcript-<%= index %>" data-commentable-target="transcript" data-transcript-index="<%= index %>"><%=render_transcript_with_comments(t, @journal, index) %></div>
       <% end %>
     </div>
     <button

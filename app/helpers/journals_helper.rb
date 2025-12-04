@@ -1,7 +1,7 @@
 module JournalsHelper
-  def render_transcript_with_comments(string, journal)
+  def render_transcript_with_comments(string, journal, transcript_index)
     # text     = journal.transcript.gsub(/```json\n|```/, '') || ""
-    comments = journal.comments.order(:start_index)
+    comments = journal.comments.where(transcript_index: transcript_index).order(:start_index)
 
     result  = +""
     cursor  = 0
