@@ -26,8 +26,15 @@ export default class extends Controller {
             const mimeType = this.mediaRecorder.mimeType;
             const blob = new Blob(chunks, { type: mimeType });
             chunks = [];
+
+            // Get correct file extension based on MIME type
+            const ext = mimeType.includes('webm') ? 'webm' :
+                        mimeType.includes('ogg') ? 'ogg' :
+                        mimeType.includes('mp4') ? 'mp4' :
+                        mimeType.includes('wav') ? 'wav' : 'webm';
+
             const formData = new FormData();
-            formData.append('audio', blob, 'recording.wav');
+            formData.append('audio', blob, `recording.${ext}`);
             const response = fetch(`/journals/${this.journalValue}/add_audio`, {
                 method: 'PATCH',
                 body: formData,

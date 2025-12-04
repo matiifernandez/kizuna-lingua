@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["display", "startButton", "turnIndicator", "playIcon", "recordingIndicator"]
 
   static values = {
-    duration: { type: Number, default: 10 },
+    duration: { type: Number, default: 120 },
     userLanguage: { type: String, default: "Your Language" },
     partnerLanguage: { type: String, default: "Partner's Language" }
   }

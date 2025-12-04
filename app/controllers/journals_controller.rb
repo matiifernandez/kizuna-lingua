@@ -70,8 +70,8 @@ class JournalsController < ApplicationController
       audio = params[:audio]
       @journal.audio.attach(
         io: audio,
-        filename: "audio#{@journal.id}.wav",
-        content_type: "audio/wav"
+        filename: audio.original_filename,
+        content_type: audio.content_type
       )
       TranscribeAudioJob.perform_later(@journal.audio.blob.id, "Journal", @journal.id)
     end
