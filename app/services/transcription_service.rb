@@ -9,20 +9,33 @@ class TranscriptionService
 
   def call
     audio_path = resolve_audio_path
+    prompt = <<~PROMPT
+        Return a **JSON array** of sentences only.
 
-    transcript = RubyLLM.transcribe(
-      audio_path,
-      model: "gemini-2.5-flash",
-      prompt: "Return only the verbatim transcript."
-    )
+        REQUIREMENTS:
+        - Output must be valid JSON.
+        - No explanation, no surrounding text.
+        - Japanese must be in Japanese characters.
+        - English must be in the Latin alphabet.
 
-    { success: true, transcript: transcript.text }
-  rescue ArgumentError => e
-    { success: false, error: e.message }
-  rescue => e
-    { success: false, error: "Transcription failed: #{e.message}" }
-  ensure
-    cleanup_tempfile
+        Respond ONLY with the JSON array.
+      PROMPT
+
+    begin
+      transcript = RubyLLM.transcribe(
+        audio_path,
+        model: "gemini-2.5-flash",
+        prompt: prompt
+      )
+
+      { success: true, transcript: transcript.text }
+    rescue ArgumentError => e
+      { success: false, error: e.message }
+    rescue => e
+      { success: false, error: "Transcription failed: #{e.message}" }
+    ensure
+      cleanup_tempfile
+    end
   end
 
   private

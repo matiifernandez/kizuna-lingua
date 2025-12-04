@@ -5,6 +5,7 @@ class CommentsController < ApplicationController
       user: current_user,
       start_index: comment_params[:start_index],
       end_index: comment_params[:end_index],
+      transcript_index: comment_params[:transcript_index],
       content: comment_params[:body]
     )
     authorize @comment
@@ -24,6 +25,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:journal_id, :start_index, :end_index, :body)
+    params.require(:comment).permit(:journal_id, :start_index, :end_index, :transcript_index, :body)
   end
 end

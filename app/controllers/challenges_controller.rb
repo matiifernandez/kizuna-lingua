@@ -3,7 +3,7 @@ class ChallengesController < ApplicationController
   def show
     @challenge = Challenge.find(params[:id])
     @topic = @challenge.topic
-    @journal = @challenge.journal
+    @journal = current_user.journals.where(challenge: @challenge).first
     @partner_journal = @challenge.partner_journal(current_user)
     @partnership = current_user.partnership
 

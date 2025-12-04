@@ -20,6 +20,7 @@ class JournalsController < ApplicationController
   def edit
     @journal = Journal.find(params[:id])
     authorize @journal
+    @transcript = JSON.parse(@journal.transcript.gsub(/```json\n|```/, ''))
   end
 
   def new
@@ -65,11 +66,12 @@ class JournalsController < ApplicationController
     all_journals = Journal.where(challenge: @challenge, partnership: @partnership)
     partner_journal = all_journals.find_by("id != ?", @journal.id)
     if params[:audio].present?
+      @journal.audio.purge
       audio = params[:audio]
       @journal.audio.attach(
         io: audio,
-        filename: "audio#{@journal.id}.webm",
-        content_type: "audio/webm"
+        filename: "audio#{@journal.id}.wav",
+        content_type: "audio/wav"
       )
       TranscribeAudioJob.perform_later(@journal.audio.blob.id, "Journal", @journal.id)
     end

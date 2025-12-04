@@ -11,7 +11,7 @@ export default class extends Controller {
     this.handleSelectionChange = this.handleSelectionChange.bind(this)
     this.selectionTimeout = null
     this.currentSelection = null
-
+    this.currentTranscript = null
 
     // selectionchange works both on desktop and mobile (including PWAs)
     document.addEventListener("selectionchange", this.handleSelectionChange)
@@ -37,12 +37,18 @@ export default class extends Controller {
 
       const range = selection.getRangeAt(0)
 
-      // Only react if selection is inside our transcript container
-      if (!this.element.contains(range.commonAncestorContainer)) {
+      // Only react if selection is inside one of our transcript containers
+      const transcriptContainer = this.transcriptTargets.find(target =>
+        target.contains(range.commonAncestorContainer)
+      )
+      if (!transcriptContainer) {
         this.hideButton()
         this.currentSelection = null
         return
       }
+
+      // Store which transcript the selection is in
+      this.currentTranscript = transcriptContainer
 
       const selectedText = selection.toString().trim()
       if (!selectedText) {
@@ -100,12 +106,15 @@ export default class extends Controller {
     const { start, end } = this.getOffsets(range)
     if (start === end) return
 
+    const transcriptIndex = this.currentTranscript.dataset.transcriptIndex
+
     const body = window.prompt(`Comment for: "${selectedText}"`)
     if (!body) return
 
     this.createComment({
       start_index: start,
       end_index: end,
+      transcript_index: transcriptIndex,
       selected_text: selectedText,
       body: body
     })
@@ -119,16 +128,17 @@ export default class extends Controller {
 
   // Translate DOM range to character offsets in the transcript text
   getOffsets(range) {
+    const transcript = this.currentTranscript
+
     const preRange = range.cloneRange()
-    preRange.selectNodeContents(this.transcriptTarget)
+    preRange.selectNodeContents(transcript)
     preRange.setEnd(range.startContainer, range.startOffset)
     const start = preRange.toString().length
 
     const fullRange = range.cloneRange()
-    fullRange.selectNodeContents(this.transcriptTarget)
+    fullRange.selectNodeContents(transcript)
     fullRange.setEnd(range.endContainer, range.endOffset)
     const end = fullRange.toString().length
-    console.log(start, end);
 
     return { start, end }
   }
@@ -148,7 +158,7 @@ export default class extends Controller {
           journal_id: this.journalIdValue,
           start_index: data.start_index,
           end_index: data.end_index,
-
+          transcript_index: data.transcript_index,
           body: data.body
         }
       })

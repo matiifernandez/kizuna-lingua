@@ -27,7 +27,7 @@ export default class extends Controller {
             const blob = new Blob(chunks, { type: mimeType });
             chunks = [];
             const formData = new FormData();
-            formData.append('audio', blob, 'recording.webm');
+            formData.append('audio', blob, 'recording.wav');
             const response = fetch(`/journals/${this.journalValue}/add_audio`, {
                 method: 'PATCH',
                 body: formData,
