@@ -37,12 +37,16 @@ GOOGLE_AI_STUDIO=your_own_google_ai_studio_key
 ```
 rails db:create
 rails db:migrate
+rails db:seed
 ```
 
 ### Run a server
 ```
 rails s
 ```
+### Sign in as our test users
+- Native English speaker: email: `test@mail.com` password: [123456]
+- Native Japanese speaker: email: `testjpn@mail.com` password [123456]
 
 ## Built With
 - [Rails 7](https://guides.rubyonrails.org/) - Backend / Front-end
